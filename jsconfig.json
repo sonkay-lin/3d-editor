@@ -1,19 +1,36 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "module": "esnext",
-    "baseUrl": "./",
-    "moduleResolution": "node",
-    "paths": {
+    "target": "esnext", //es语法
+    "module": "esnext", //打包模块类型
+    "strict": false, //严格模式
+    "allowJs": true, //
+    "jsx": "preserve", //解决jsx文件无法跳转
+    "moduleResolution": "node", //按照node模块来解析
+    "experimentalDecorators": true, //装饰器语法
+    "esModuleInterop": true, //支持es6 commonjs模块
+    "allowSyntheticDefaultImports": true, //允许没有导出的模块中导入
+    "resolveJsonModule":true, //解析json模块
+    "sourceMap": true, //
+    "baseUrl": ".", //指定模块基础目录
+    "skipLibCheck": true, //跳过类库检测
+    "paths": { //解析项目中的路径别名，导致vscode无法跳转到文件的问题
       "@/*": [
         "src/*"
       ]
     },
     "lib": [
       "esnext",
-      "dom",
-      "dom.iterable",
-      "scripthost"
+      "dom"
     ]
-  }
+  },
+  "include": [
+    "src/**/*.js",
+    "src/**/*.ts",
+    "src/**/*.jsx",
+    "src/**/*.vue"
+  ],
+  "exclude": [ //排除的类库
+    "node_modules",
+    "dist"
+  ]
 }

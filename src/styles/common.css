@@ -1,0 +1,27 @@
+
+.title {
+  line-height: 28px;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.type {
+  color: #fff;
+}
+.move-state {
+  cursor: none!important;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+}
+
+
+.minimal-font {
+  transform: scale(0.5) translateX(50%);
+  font-size: 20px;
+  white-space: nowrap;
+}

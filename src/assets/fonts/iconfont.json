@@ -1,0 +1,226 @@
+{
+  "id": "4450845",
+  "name": "editor",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "29222975",
+      "name": "辅助",
+      "font_class": "fuzhu",
+      "unicode": "e7e3",
+      "unicode_decimal": 59363
+    },
+    {
+      "icon_id": "35966753",
+      "name": "辅助线",
+      "font_class": "fuzhuxian",
+      "unicode": "e95b",
+      "unicode_decimal": 59739
+    },
+    {
+      "icon_id": "7372772",
+      "name": "吸附关闭",
+      "font_class": "xifuguanbi",
+      "unicode": "e65f",
+      "unicode_decimal": 58975
+    },
+    {
+      "icon_id": "7372773",
+      "name": "吸附开启",
+      "font_class": "xifukaiqi",
+      "unicode": "e660",
+      "unicode_decimal": 58976
+    },
+    {
+      "icon_id": "19210018",
+      "name": "三维坐标",
+      "font_class": "sanweizuobiao",
+      "unicode": "e602",
+      "unicode_decimal": 58882
+    },
+    {
+      "icon_id": "22739635",
+      "name": "三维场景",
+      "font_class": "sanweichangjing1",
+      "unicode": "e6be",
+      "unicode_decimal": 59070
+    },
+    {
+      "icon_id": "924504",
+      "name": "cube",
+      "font_class": "cube",
+      "unicode": "e935",
+      "unicode_decimal": 59701
+    },
+    {
+      "icon_id": "10904206",
+      "name": "x轴",
+      "font_class": "xalxe",
+      "unicode": "e611",
+      "unicode_decimal": 58897
+    },
+    {
+      "icon_id": "10904356",
+      "name": "z轴",
+      "font_class": "zaxle",
+      "unicode": "e612",
+      "unicode_decimal": 58898
+    },
+    {
+      "icon_id": "14292406",
+      "name": "y轴",
+      "font_class": "yaxis",
+      "unicode": "ea06",
+      "unicode_decimal": 59910
+    },
+    {
+      "icon_id": "19447574",
+      "name": "渲染设置",
+      "font_class": "xuanranshezhi",
+      "unicode": "e68f",
+      "unicode_decimal": 59023
+    },
+    {
+      "icon_id": "26825161",
+      "name": "三维场景",
+      "font_class": "sanweichangjing",
+      "unicode": "e6bd",
+      "unicode_decimal": 59069
+    },
+    {
+      "icon_id": "39176073",
+      "name": "世界坐标",
+      "font_class": "shijiezuobiao",
+      "unicode": "ebe5",
+      "unicode_decimal": 60389
+    },
+    {
+      "icon_id": "39284345",
+      "name": "本地坐标",
+      "font_class": "bendizuobiao",
+      "unicode": "e60a",
+      "unicode_decimal": 58890
+    },
+    {
+      "icon_id": "1175327",
+      "name": "货物体积",
+      "font_class": "huowutiji",
+      "unicode": "e636",
+      "unicode_decimal": 58934
+    },
+    {
+      "icon_id": "6761799",
+      "name": "材质",
+      "font_class": "caizhi",
+      "unicode": "e610",
+      "unicode_decimal": 58896
+    },
+    {
+      "icon_id": "17228621",
+      "name": "历史记录",
+      "font_class": "lishijilu",
+      "unicode": "e643",
+      "unicode_decimal": 58947
+    },
+    {
+      "icon_id": "7594406",
+      "name": "24gl-grid",
+      "font_class": "24gl-grid",
+      "unicode": "ea98",
+      "unicode_decimal": 60056
+    },
+    {
+      "icon_id": "24862277",
+      "name": "退出全屏",
+      "font_class": "tuichuquanping",
+      "unicode": "e64b",
+      "unicode_decimal": 58955
+    },
+    {
+      "icon_id": "630128",
+      "name": "照相机",
+      "font_class": "zhaoxiangji1",
+      "unicode": "e663",
+      "unicode_decimal": 58979
+    },
+    {
+      "icon_id": "2223947",
+      "name": "重做",
+      "font_class": "zhongzuo",
+      "unicode": "e682",
+      "unicode_decimal": 59010
+    },
+    {
+      "icon_id": "4236649",
+      "name": "旋转",
+      "font_class": "xuanzhuan",
+      "unicode": "e615",
+      "unicode_decimal": 58901
+    },
+    {
+      "icon_id": "5209605",
+      "name": "全屏",
+      "font_class": "quanping",
+      "unicode": "e620",
+      "unicode_decimal": 58912
+    },
+    {
+      "icon_id": "5388015",
+      "name": "包裹_盒子_o",
+      "font_class": "baoguo_hezi_o",
+      "unicode": "ebb6",
+      "unicode_decimal": 60342
+    },
+    {
+      "icon_id": "7597964",
+      "name": "24gl-move",
+      "font_class": "24gl-move",
+      "unicode": "eb70",
+      "unicode_decimal": 60272
+    },
+    {
+      "icon_id": "9903861",
+      "name": "光线",
+      "font_class": "guangxian",
+      "unicode": "e652",
+      "unicode_decimal": 58962
+    },
+    {
+      "icon_id": "9929033",
+      "name": "export",
+      "font_class": "export",
+      "unicode": "e642",
+      "unicode_decimal": 58946
+    },
+    {
+      "icon_id": "11399565",
+      "name": "撤销",
+      "font_class": "chexiao",
+      "unicode": "e637",
+      "unicode_decimal": 58935
+    },
+    {
+      "icon_id": "11399566",
+      "name": "导入",
+      "font_class": "daoru",
+      "unicode": "e638",
+      "unicode_decimal": 58936
+    },
+    {
+      "icon_id": "29233555",
+      "name": "渲染器",
+      "font_class": "xuanranqi",
+      "unicode": "e830",
+      "unicode_decimal": 59440
+    },
+    {
+      "icon_id": "35171473",
+      "name": "模型2",
+      "font_class": "moxing2",
+      "unicode": "e860",
+      "unicode_decimal": 59488
+    }
+  ]
+}
