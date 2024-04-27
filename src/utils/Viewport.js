@@ -1,14 +1,15 @@
 import * as THREE from 'three';
 import { EditorControls } from './EditorControls';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+// import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { OrbitControls } from '@/libs/OrbitControls';
 import { TransformControls } from 'three/examples/jsm/controls/TransformControls.js';
 import { ViewportPathtracer } from './Viewport.Pathtracer.js';
-import { AddObjectCommand, SetPositionCommand, SetRotationCommand, SetScaleCommand } from './commands/Commands';
+import { SetPositionCommand, SetRotationCommand, SetScaleCommand } from './commands/Commands';
 import { useViewport } from '@/hooks/useViewport';
 import { globalConfig, sceneConfig } from '@/hooks/useConfig';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 import { useTool } from '@/hooks/useTool';
-import { MODE } from './Editor';
+import { mouseInteraction } from './Viewport.MouseInteractions';
 
 /**
  * @description Viewport 添加dom操作和事件
@@ -85,6 +86,19 @@ export default function Viewport(editor) {
           helper.update();
         }
         if (transformControls.dragging) {
+          const { axis } = transformControls;
+          const mode = transformControls.getMode();
+          if (mode === 'translate' && globalConfig.isAdsorption) {
+            if (axis.includes('X')) {
+              object.position.x = parseInt(object.position.x) + 0.5;
+            }
+            if (axis.includes('Y')) {
+              object.position.y = parseInt(object.position.y) + 0.5;
+            }
+            if (axis.includes('Z')) {
+              object.position.z = parseInt(object.position.z) + 0.5;
+            }
+          }
           dispatch.refreshSidebarObject3D(object);
         }
       }
@@ -132,8 +146,8 @@ export default function Viewport(editor) {
   // viewHelper.center = controls.center;
 
   // 对象拾取
-  const addStart = usePickerObject(editor, dom, render, Plane, controls);
-  useViewport({ controls, transformControls, addStart, render });
+  const { addStart, cancelAdd } = mouseInteraction({ editor, dom, plane: Plane, controls, transformControls });
+  useViewport({ controls, transformControls, addStart, cancelAdd, render });
 
   // 事件
   (() => {
@@ -166,7 +180,7 @@ export default function Viewport(editor) {
       render();
     });
     // 聚焦到对象
-    onEvent.objectFocused((object) => controls.focus(object));
+    // onEvent.objectFocused((object) => controls.focus(object));
     // 对象移除事件
     onEvent.objectRemoved((object) => {
       controls.enabled = true;
@@ -194,6 +208,7 @@ export default function Viewport(editor) {
           controls.enableRotate = false;
         }
       }
+      // 新增情况下不让鼠标左键和右键
       if (editor.mode === editor.ADD) {
         controls.enableRotate = false;
         controls.enablePan = false;
@@ -210,13 +225,13 @@ export default function Viewport(editor) {
     // 相机重新设置事件
     onEvent.cameraResetted(() => updateAspectRatio());
     // 材质修改事件
-    onEvent.materialChanged(() => render(false, 'materialChanged'));
+    onEvent.materialChanged(() => render());
     // 几何修改事件
     onEvent.geometryChanged((object) => {
       if (object !== undefined) {
         box.setFromObject(object, true);
       }
-      render(false, 'geometryChanged');
+      render();
     });
     // 是否显示网格
     onEvent.showGridChanged((value) => {
@@ -319,7 +334,7 @@ export default function Viewport(editor) {
     window.addEventListener('keydown', registerKeyboard);
   })();
 
-  // 更新像素
+  // 更新像素比
   function updateAspectRatio() {
     const { camera } = editor;
     camera.aspect = dom.offsetWidth / dom.offsetHeight;
@@ -330,7 +345,7 @@ export default function Viewport(editor) {
   let startTime = 0;
   let endTime = 0;
   function render(isHelper = false, where) {
-    // console.log('render', where);
+    console.log('render', where);
     const { camera, viewportCamera } = editor;
     if (editor.viewportShading === 'realistic' && isHelper === false) {
       pathtracer.init(scene, camera);
@@ -359,183 +374,3 @@ function updateGridColors(grid1, grid2, colors) {
   grid1.material.color.setHex(colors[0]);
   grid2.material.color.setHex(colors[1]);
 }
-
-const usePickerObject = (editor, dom, render, plane, controls) => {
-  const { scene, sceneHelpers, dispatch } = editor;
-  // 对象拾取--start
-  const raycaster = new THREE.Raycaster();
-  const mouse = new THREE.Vector2();
-  // 获取相交的对象
-  function getIntersects(point) {
-    const { camera } = editor;
-    mouse.set(point.x * 2 - 1, -(point.y * 2) + 1);
-    raycaster.setFromCamera(mouse, camera);
-
-    const objects = [];
-    scene.traverseVisible((child) => {
-      objects.push(child);
-    });
-    sceneHelpers.traverseVisible((child) => {
-      if (child.name === 'picker') objects.push(child);
-    });
-    if (editor.mode === MODE.ADD) {
-      objects.push(plane);
-    }
-    return raycaster.intersectObjects(objects, false);
-  }
-  // 记录鼠标对应的位置
-  const onDownPosition = new THREE.Vector2();
-  const onUpPosition = new THREE.Vector2();
-  const onDoubleClickPosition = new THREE.Vector2();
-
-  const pointer = new THREE.Vector2();
-  // 获取鼠标位置
-  function getMousePosition(dom, x, y) {
-    const rect = dom.getBoundingClientRect();
-    return [(x - rect.left) / rect.width, (y - rect.top) / rect.height];
-  }
-  // 处理点击
-  function handleClick() {
-    if (onDownPosition.distanceTo(onUpPosition) === 0) {
-      const intersects = getIntersects(onUpPosition);
-      dispatch.intersectionsDetected(intersects);
-      render();
-    }
-  }
-  // 点击下去
-  function onMouseDown(event) {
-    const { renderer } = editor;
-    // event.preventDefault();
-    if (event.target !== renderer.domElement) return;
-    const array = getMousePosition(dom, event.clientX, event.clientY);
-    onDownPosition.fromArray(array);
-    document.addEventListener('mouseup', onMouseUp);
-  }
-  // 点击松开
-  function onMouseUp(event) {
-    const array = getMousePosition(dom, event.clientX, event.clientY);
-    onUpPosition.fromArray(array);
-    handleClick();
-
-    dispatch.sceneGraphChanged();
-    document.removeEventListener('mouseup', onMouseUp);
-  }
-  // 开始触摸
-  function onTouchStart(event) {
-    const touch = event.changedTouches[0];
-    const array = getMousePosition(dom, touch.clientX, touch.clientY);
-    onDownPosition.fromArray(array);
-    document.addEventListener('touchend', onTouchEnd);
-  }
-  // 触摸结束
-  function onTouchEnd(event) {
-    const touch = event.changedTouches[0];
-    const array = getMousePosition(dom, touch.clientX, touch.clientY);
-    onUpPosition.fromArray(array);
-    handleClick();
-    document.removeEventListener('touchend', onTouchEnd);
-  }
-  // 双击
-  function onDoubleClick(event) {
-    const array = getMousePosition(dom, event.clientX, event.clientY);
-    onDoubleClickPosition.fromArray(array);
-    const intersects = getIntersects(onDoubleClickPosition);
-    if (intersects.length > 0) {
-      const intersect = intersects[0];
-      dispatch.objectFocused(intersect.object);
-    }
-  }
-
-  // let isAdding = false;
-  let addObject = null;
-  let objectHalfHeight = 0;
-  function addStart(object) {
-    editor.mode = MODE.ADD;
-    // 如果没有取消，再次点击，就要将影子去掉
-    if (addObject) {
-      sceneHelpers.remove(addObject);
-    }
-    addObject = object;
-    addObject.position.copy(new THREE.Vector3(0, 0, 0));
-    // 将物体设置成透明状态
-    if (addObject.material) {
-      addObject.material.transparent = true;
-      addObject.material.opacity = 0.4;
-    }
-    // 将几何体放到平面上
-    if (addObject.geometry) {
-      const box = new THREE.Box3();
-      box.setFromObject(addObject, true);
-      objectHalfHeight = box.max.y;
-      objectHalfHeight = Number(objectHalfHeight.toFixed(2));
-    }
-    sceneHelpers.add(addObject);
-    // 轨道控制器禁用左键和右键
-    controls.enablePan = false;
-    controls.enableRotate = false;
-    // 移除选择物体的事件
-    removeEventListener();
-    // 添加鼠标在场景中点击添加物体的事件
-    dom.addEventListener('mousemove', onMouseMove);
-    dom.addEventListener('click', onMouseDownAdd);
-    document.addEventListener('contextmenu', cancelAdd);
-    render();
-  }
-  function onMouseDownAdd() {
-    const object = addObject.clone();
-    if (addObject.material) {
-      object.material = addObject.material.clone();
-      object.material.transparent = false;
-      object.material.opacity = 1;
-    }
-    editor.execute(new AddObjectCommand(object, false));
-    render();
-  }
-  function onMouseMove(event) {
-    const array = getMousePosition(dom, event.clientX, event.clientY);
-    pointer.fromArray(array);
-    const intersects = getIntersects(pointer);
-    if (intersects.length === 0) return;
-    const intersect = intersects[0];
-    addObject.position.copy(intersect.point); //.add(intersect.face.normal);
-    // addObject.position.divideScalar( 1 ).floor().multiplyScalar( 1 ).addScalar( 0.5 );
-    addObject.position.y = Math.abs(addObject.position.y);
-    if (addObject.geometry) {
-      addObject.position.y += objectHalfHeight;
-    }
-    render();
-  }
-  function cancelAdd(event) {
-    event.preventDefault();
-    editor.mode = MODE.DEFAULT;
-    sceneHelpers.remove(addObject);
-    addObject = null;
-    controls.enableRotate = true;
-    controls.enablePan = true;
-    dom.removeEventListener('click', onMouseDownAdd);
-    dom.removeEventListener('mousemove', onMouseMove);
-    document.removeEventListener('contextmenu', cancelAdd);
-    resetEventListener();
-    render();
-  }
-
-  function removeEventListener() {
-    dom.removeEventListener('mousedown', onMouseDown);
-    dom.removeEventListener('touchstart', onTouchStart, { passive: false });
-    dom.removeEventListener('dblclick', onDoubleClick);
-  }
-
-  function resetEventListener() {
-    dom.addEventListener('mousedown', onMouseDown);
-    dom.addEventListener('touchstart', onTouchStart, { passive: false });
-    dom.addEventListener('dblclick', onDoubleClick);
-  }
-
-  // dom.addEventListener('mousedown', onMouseDown);
-  // dom.addEventListener('touchstart', onTouchStart, { passive: false });
-  // dom.addEventListener('dblclick', onDoubleClick);
-  resetEventListener();
-  // 对象拾取--end
-
-  return addStart;
-};

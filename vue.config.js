@@ -1,7 +1,4 @@
 const { defineConfig } = require('@vue/cli-service');
-const AutoImport = require('unplugin-auto-import/webpack');
-const Components = require('unplugin-vue-components/webpack');
-const { ElementPlusResolver } = require('unplugin-vue-components/resolvers');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const cdn = {
@@ -60,10 +57,10 @@ module.exports = defineConfig({
   // }
   chainWebpack: (config) => {
     // if (isProduction) {
-      config.plugin('html').tap((args) => {
-        args[0].cdn = cdn;
-        return args;
-      });
+    //   config.plugin('html').tap((args) => {
+    //     args[0].cdn = cdn;
+    //     return args;
+    //   });
     // }
   }
 });

@@ -1,11 +1,10 @@
-import { materialClasses } from './MaterialParameters';
+import { materialClasses, vertexShaderVariables } from './MaterialParameters';
 import { getEditor } from '@/hooks/useEditor';
 import { computed, ref, toRaw } from 'vue';
 import {
   SetMaterialCommand,
   SetMaterialValueCommand,
   SetMaterialColorCommand,
-  SetMaterialMapCommand
 } from '@/utils/commands/Commands';
 import { isShowMaterialOrGeometry } from '@/libs';
 
@@ -22,7 +21,6 @@ const updateUI = () => {};
 
 const change = (params) => {
   try {
-    console.log(params);
     const object = toRaw(selectedObj.value);
     commands[params]?.(object);
   } catch (error) {
@@ -34,6 +32,9 @@ const commands = {
   type: (object) => {
     const { type } = formData.value;
     const material = new materialClasses[type]();
+    if (material.type === 'RawShaderMaterial') {
+      material.vertexShader = vertexShaderVariables + material.vertexShader;
+    }
     const newMaterial = material;
     formData.value = material;
     editor.execute(new SetMaterialCommand(object, newMaterial, 0), `修改材质类型`);
@@ -178,7 +179,6 @@ const registerEvent = () => {
   });
   editor.onEvent.materialChanged((object) => {
     const selected = toRaw(selectedObj.value);
-    console.log(object, 'materialChanged');
     if (!selected) return;
     const { material } = object;
     formData.value = material.clone();

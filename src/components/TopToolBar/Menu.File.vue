@@ -25,6 +25,7 @@
 
 <script setup>
 import { getEditor } from '@/hooks/useEditor';
+import { getViewport } from '@/hooks/useViewport';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { onMounted, ref } from 'vue';
 
@@ -36,10 +37,12 @@ const commands = {
   New: () => {
     ElMessageBox.alert('未保存的数据都将丢失。你确定吗？', '提示', {
       confirmButtonText: '确定',
-      cancelButtonText: '取消'
+      cancelButtonText: '取消',
+      showCancelButton: true
     })
       .then(() => {
         editor.clear();
+        getViewport().cancelAdd()
       })
       .catch(() => {
         console.log('取消了');

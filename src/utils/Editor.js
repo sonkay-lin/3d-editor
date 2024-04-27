@@ -98,13 +98,20 @@ Editor.prototype = {
     this.scene.backgroundBlurriness = scene.backgroundBlurriness;
     this.scene.backgroundIntensity = scene.backgroundIntensity;
     this.scene.userData = JSON.parse(JSON.stringify(scene.userData));
-
+    // TODO: 改用signals不然事件会频繁触发
     // this.signals.sceneGraphChanged.active = false;
     while (scene.children.length > 0) {
       this.addObject(scene.children[0]);
     }
     // this.signals.sceneGraphChanged.active = true;
     this.dispatch.refreshSenceUI();
+  },
+
+  objectByUuid: function (uuid) {
+    return this.scene.getObjectByProperty('uuid', uuid, true);
+  },
+  getObjectById: function (id) {
+    return this.scene.getObjectById(id);
   },
   /**
    * @description 添加物体
@@ -311,9 +318,6 @@ Editor.prototype = {
       materialsRefCounter.set(material, count);
     }
   },
-  objectByUuid: function (uuid) {
-    return this.scene.getObjectByProperty('uuid', uuid, true);
-  },
 
   // 操作
   // 选择物体
@@ -327,7 +331,9 @@ Editor.prototype = {
   // 聚焦到物体上
   focus: function (object) {
     if (object !== undefined) {
-      this.dispatch.objectFocused(object);
+      // this.dispatch.objectFocused(object);
+      // this.viewportCamera.position.copy(object.position);
+      // dispatch.sceneGraphChanged();
     }
   },
   focusById: function (id) {
@@ -374,6 +380,7 @@ Editor.prototype = {
   },
 
   fromJSON: async function (json) {
+    let start = performance.now();
     let loader = new THREE.ObjectLoader();
     let camera = await loader.parseAsync(json.camera);
 
@@ -389,6 +396,8 @@ Editor.prototype = {
       // TODO
       // this.signals.sceneEnvironmentChanged.dispatch(json.environment);
     }
+    console.log(`初始化editor完成：${performance.now() - start}`);
+    dispatch.editorCreated();
   },
   toJSON: function () {
     // scripts clean up
@@ -436,7 +445,7 @@ Editor.prototype = {
 
     let objects = this.scene.children;
 
-    resetConfig()
+    resetConfig();
 
     // this.signals.sceneGraphChanged.active = false;
 

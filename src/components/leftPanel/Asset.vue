@@ -8,6 +8,7 @@
           v-for="item in assetList"
           v-loading="item.isLoading && item.isLoading.value"
           @click="addObject(item)"
+          @dblclick="dbclick(item)"
           :key="item.key"
         >
           <template #header>{{ item.name }}</template>
@@ -50,6 +51,14 @@ const addObject = async (obj) => {
   }
   objectMap.init(obj.key);
 };
+
+const dbclick = (obj) => {
+  if (active.value === 'object3d') {
+    assetList = object3DList;
+    objectMap.init(obj.key, true);
+    getViewport().cancelAdd();
+  } 
+}
 
 const changeNav = () => {
   if (active.value === 'object3d') {

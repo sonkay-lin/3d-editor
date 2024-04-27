@@ -8,18 +8,19 @@ import { nextTick, onMounted } from 'vue';
 import { initEditor } from '@/hooks/useEditor'
 import { globalConfig, initConfig } from '@/hooks/useConfig';
 
+initConfig()
+// TODO: 这里 editor.fromJSON 是异步加载的，后面改用异步组件
 const editor = initEditor()
 
 onMounted(() => {
-  initConfig()
   let v = new viewport(editor)
-  nextTick(() => {
-    const { renderer: option } = globalConfig
-    // 等viewport中dom加载完将渲染器挂载
-    editor.createRenderer(option)
-    // 页面加载完自动调用一次
-    editor.dispatch.windowResize()
-  })
+  const { renderer: option } = globalConfig
+  // 等viewport中dom加载完将渲染器挂载
+  editor.createRenderer(option)
+  // 页面加载完自动调用一次
+  editor.dispatch.windowResize()
+  // nextTick(() => {
+  // })
 })
 </script>
 

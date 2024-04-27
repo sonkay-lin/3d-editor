@@ -45,6 +45,7 @@ const viewpoints = [
       camera.position.set(0, 0, -1000);
       camera.rotation.y = 180 * THREE.MathUtils.DEG2RAD;
       camera.lookAt(new THREE.Vector3(0, 0, 0));
+      editor.camera = editor.cameras[camera.uuid];
 
       editor.setViewportCamera(camera.uuid);
     }
@@ -59,6 +60,7 @@ const viewpoints = [
       camera.position.set(-1000, 0, 0);
       camera.rotation.y = -90 * THREE.MathUtils.DEG2RAD;
       camera.lookAt(new THREE.Vector3(0, 0, 0));
+      editor.camera = editor.cameras[camera.uuid];
 
       editor.setViewportCamera(camera.uuid);
     }
@@ -73,6 +75,7 @@ const viewpoints = [
       camera.position.set(1000, 0, 0);
       camera.rotation.y = 90 * THREE.MathUtils.DEG2RAD;
       camera.lookAt(new THREE.Vector3(0, 0, 0));
+      editor.camera = editor.cameras[camera.uuid];
       
       editor.setViewportCamera(camera.uuid);
     }
@@ -87,6 +90,7 @@ const viewpoints = [
       camera.position.set(0, 1000, 0);
       camera.rotation.x = -90 * THREE.MathUtils.DEG2RAD;
       camera.lookAt(new THREE.Vector3(0, 0, 0));
+      editor.camera = editor.cameras[camera.uuid];
       
       editor.setViewportCamera(camera.uuid);
     }
@@ -101,6 +105,7 @@ const viewpoints = [
       camera.position.set(0, -1000, 0);
       camera.rotation.y = 90 * THREE.MathUtils.DEG2RAD;
       camera.lookAt(new THREE.Vector3(0, 0, 0));
+      editor.camera = editor.cameras[camera.uuid];
       
       editor.setViewportCamera(camera.uuid);
     }

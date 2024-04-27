@@ -306,6 +306,11 @@ export default defineComponent({
           <ElCheckbox v-model={formData.value.forceSinglePass} onChange={() => change('forceSinglePass')} />
         </ElFormItem>
       ),
+      sizeAttenuation: () => (
+        <ElFormItem label="大小衰减">
+          <ElCheckbox v-model={formData.value.sizeAttenuation} onChange={() => change('sizeAttenuation')} />
+        </ElFormItem>
+      ),
       depthTest: () => (
         <ElFormItem label="深度测试">
           <ElCheckbox v-model={formData.value.depthTest} onChange={() => change('depthTest')} />

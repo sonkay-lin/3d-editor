@@ -6,7 +6,7 @@ function Storage() {
     return { init: function () {}, get: function () {}, set: function () {}, clear: function () {} };
   }
 
-  const name = 'threejs-editor';
+  const name = '3d-editor';
   const version = 1;
 
   let database;

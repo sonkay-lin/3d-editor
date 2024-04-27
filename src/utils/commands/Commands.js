@@ -1,4 +1,5 @@
 export { AddObjectCommand } from './AddObjectCommand.js';
+export { MoveObjectCommand } from './MoveObjectCommand.js'
 export { RemoveObjectCommand } from './RemoveObjectCommand.js';
 export { SetPositionCommand } from './SetPositionCommand.js';
 export { SetRotationCommand } from './SetRotationCommand.js';

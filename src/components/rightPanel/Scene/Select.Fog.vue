@@ -91,7 +91,6 @@ const settingChange = (type) => {
 
 onMounted(() => {
   editor = getEditor();
-  console.log(editor.scene)
   editor.onEvent.refreshSenceUI(() => {
     const { fog } = editor.scene;
     if (sceneConfig.fogType === 'Fog' && fog) {

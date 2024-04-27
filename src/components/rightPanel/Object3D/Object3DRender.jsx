@@ -175,7 +175,21 @@ export default defineComponent({
         html.push(shadow());
         return html;
       },
+      Scene: () => {
+        const html = [];
+        html.push(rotation());
+        html.push(scale());
+        html.push(shadow());
+        return html;
+      },
       Group: () => {
+        const html = [];
+        html.push(rotation());
+        html.push(scale());
+        html.push(shadow());
+        return html;
+      },
+      Sprite: () => {
         const html = [];
         html.push(rotation());
         html.push(scale());

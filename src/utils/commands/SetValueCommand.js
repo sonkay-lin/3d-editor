@@ -79,8 +79,8 @@ class SetValueCommand extends Command {
     this.editor.dispatch.objectChanged(this.object);
     // this.editor.signals.sceneGraphChanged.dispatch();
     // 如果是name属性，刷新页面ui
-    if (this.attributeName === 'name') {
-      this.editor.dispatch.refreshObjectName(this.object);
+    if (this.attributeName === 'name' || this.attributeName === 'visible') {
+      this.editor.dispatch.refreshObjectUI(this.object, this.attributeName);
     }
   }
 
@@ -98,8 +98,8 @@ class SetValueCommand extends Command {
     this.editor.dispatch.objectChanged(this.object);
     // this.editor.signals.sceneGraphChanged.dispatch();
     // 如果是name属性，刷新页面ui
-    if (this.attributeName === 'name') {
-      this.editor.dispatch.refreshObjectName(this.object);
+    if (this.attributeName === 'name' || this.attributeName === 'visible') {
+      this.editor.dispatch.refreshObjectUI(this.object, this.attributeName);
     }
   }
 

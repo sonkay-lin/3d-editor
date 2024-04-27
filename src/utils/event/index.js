@@ -15,6 +15,8 @@ export const dispatch = {
   exitedVR: () => mittBus.emit('exitedVR'),
 
   // notifications
+  editorCreated: () => mittBus.emit('editorCreated'),
+
   editorCleared: () => mittBus.emit('editorCleared'),
 
   savingStarted: () => mittBus.emit('savingStarted'),
@@ -71,7 +73,9 @@ export const dispatch = {
   refreshSidebarEnvironment: () => mittBus.emit('refreshSidebarEnvironment'),
   historyChanged: (cmd) => mittBus.emit('historyChanged', cmd),
 
-  refreshObjectName: (object) => mittBus.emit('refreshObjectName', object),
+  refreshObjectUI: (object, attr) => mittBus.emit('refreshObjectUI', object, attr),
+
+  refreshTreeUI: ({ object, parent }) => mittBus.emit('refreshTreeUI', { object, parent }),
 
   viewportCameraChanged: () => mittBus.emit('viewportCameraChanged'),
   viewportShadingChanged: () => mittBus.emit('viewportShadingChanged'),
@@ -92,6 +96,7 @@ export const onEvent = {
   exitedVR: (fn) => mittBus.on('exitedVR', fn),
 
   // notifications
+  editorCreated: (fn) => mittBus.on('editorCreated', fn),
   editorCleared: (fn) => mittBus.on('editorCleared', fn),
 
   savingStarted: (fn) => mittBus.on('savingStarted', fn),
@@ -148,7 +153,8 @@ export const onEvent = {
   refreshSidebarEnvironment: (fn) => mittBus.on('refreshSidebarEnvironment', fn),
   historyChanged: (fn) => mittBus.on('historyChanged', fn),
 
-  refreshObjectName: (fn) => mittBus.on('refreshObjectName', fn),
+  refreshObjectUI: (fn) => mittBus.on('refreshObjectUI', fn),
+  refreshTreeUI: (fn) => mittBus.on('refreshTreeUI', fn),
 
   viewportCameraChanged: (fn) => mittBus.on('viewportCameraChanged', fn),
   viewportShadingChanged: (fn) => mittBus.on('viewportShadingChanged', fn),

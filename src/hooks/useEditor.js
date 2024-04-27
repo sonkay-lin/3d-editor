@@ -10,6 +10,8 @@ export const initEditor = () => {
 
       if (state !== undefined) {
         editor.fromJSON(state);
+      } else {
+        editor.dispatch.editorCreated()
       }
 
       // TODO

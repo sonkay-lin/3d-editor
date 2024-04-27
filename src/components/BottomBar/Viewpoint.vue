@@ -20,7 +20,8 @@ const camerasList = ref([]);
 onMounted(() => {
   editor = getEditor();
   // 如果相机物体名字被修改,更新select label名字
-  editor.onEvent.refreshObjectName((object) => {
+  editor.onEvent.refreshObjectUI((object, attrs) => {
+    // TODO: attrs is undefined
     if (!object.isCamera) return
     for(let i = 0; i < customerCamera.length; i++) {
       const item = customerCamera[i]

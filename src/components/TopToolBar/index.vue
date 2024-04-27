@@ -8,13 +8,21 @@
       <ICon content="撤销(ctrl+z)" @click="command('undo')"><RefreshLeft /></ICon>
       <ICon content="撤销(ctrl+y)" @click="command('redo')"><RefreshRight /></ICon>
       <ICon content="删除" @click="delObject()"><Delete /></ICon>
-      <!-- <ICon content="吸附" code="icon-xifukaiqi" @click="dev()"></ICon>
-      <ICon content="编辑物体" code="icon-huowutiji" @click="dev()"></ICon> -->
+      <ICon
+        v-if="globalConfig.isAdsorption"
+        content="开启网格吸附"
+        code="icon-xifukaiqi"
+        @click="handleAdsorption()"
+      ></ICon>
+      <ICon v-else content="关闭网格吸附" code="icon-xifuguanbi" @click="handleAdsorption()"></ICon>
+      <ICon content="裁切物体" code="icon-qiege" @click="dev()"></ICon>
     </div>
     <div>
       <ICon v-if="!isFullSceen" content="全屏" code="icon-quanping" @click="setFullSceen()"></ICon>
       <ICon v-else content="退出全屏" code="icon-tuichuquanping" @click="setFullSceen()"></ICon>
-      <el-button class="save" type="primary" size="small" @click="save(sceneConfig)">保存</el-button>
+      <!-- <ICon content="预览" code="icon-yulan" @click="save()"></ICon> -->
+      <ICon content="保存(ctrl+s)" code="icon-baocun" @click="save()"></ICon>
+      <!-- <el-button class="save" type="primary" size="small" @click="save(sceneConfig)">保存</el-button> -->
     </div>
   </div>
 </template>
@@ -22,11 +30,11 @@
 <script setup>
 import { getEditor } from '@/hooks/useEditor';
 import { RefreshLeft, RefreshRight, Delete } from '@element-plus/icons-vue';
-import File from './File.vue';
+import File from './Menu.File.vue';
 import { useTool } from '@/hooks/useTool';
-import { sceneConfig } from '@/hooks/useConfig';
+import { globalConfig, sceneConfig } from '@/hooks/useConfig';
 
-const { isFullSceen, setFullSceen, delObject, dev, save } = useTool()
+const { isFullSceen, setFullSceen, delObject, dev, save } = useTool();
 
 const command = (action) => {
   const editor = getEditor();
@@ -37,8 +45,9 @@ const command = (action) => {
   }
 };
 
-
-
+const handleAdsorption = () => {
+  globalConfig.isAdsorption = !globalConfig.isAdsorption;
+};
 </script>
 
 <style scoped lang="scss">

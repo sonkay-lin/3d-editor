@@ -45,8 +45,11 @@ const props = defineProps({
   }
   .form-content {
     height: 100%;
+    width: 100%;
+    margin-left: -10px;
+    padding: 0 10px;
     overflow: scroll;
-  scrollbar-width: none;
+    scrollbar-width: none;
   }
 }
 </style>

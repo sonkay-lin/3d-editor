@@ -8,6 +8,8 @@ const orgConfig = {
   isShowAxis: false,
   // 辅助线
   isShowHelper: true,
+  // 吸附
+  isAdsorption: false,
   // transform控制器
   transform: {
     mode: 'translate',
@@ -38,6 +40,8 @@ export const globalConfig = reactive({
   isShowAxis: false,
   // 辅助线
   isShowHelper: true,
+  // 吸附
+  isAdsorption: false,
   // transform控制器
   transform: {
     mode: 'translate',

@@ -7,9 +7,6 @@ export const useTool = () => {
   const isFullSceen = ref(false);
 
   const setFullSceen = () => {
-    if (isFullSceen.value) {
-    } else {
-    }
     const el = document.documentElement;
     const _isFullScreen = document.fullScreen || document.mozFullScreen || document.webkitIsFullScreen;
     if (!_isFullScreen) {

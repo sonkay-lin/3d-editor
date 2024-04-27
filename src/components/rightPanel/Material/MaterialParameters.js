@@ -242,7 +242,7 @@ export const materialType = {
     'map',
     'emissiveMap',
     'alphaMap',
-    'alphaMap',
+    'bumpMap',
     'normalMap',
     'clearcoatMap',
     'clearcoatNormalMap',
@@ -323,6 +323,25 @@ export const materialType = {
     'alphaTest',
     'depthTest',
     'depthWrite',
+    'userData'
+  ],
+  SpriteMaterial: [
+    'type',
+    'uuid',
+    'name',
+    'color',
+    'vertexColors',
+    'map',
+    'alphaMap',
+    'side',
+    'sizeAttenuation',
+    'blending',
+    'opacity',
+    'transparent',
+    'forceSinglePass',
+    'alphaTest',
+    'alphaTest',
+    'depthTest',
     'userData'
   ]
 };

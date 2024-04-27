@@ -18,8 +18,9 @@ import Viewpoint from './Viewpoint.vue';
 import { currentViewPoint, defaultCamera, viewpoints, customerCamera } from './useViewpoint';
 import { globalConfig } from '@/hooks/useConfig';
 import { getEditor } from '@/hooks/useEditor';
-const GRID = 'grid'
-const AXIS = 'axis'
+const GRID = 'grid';
+const AXIS = 'axis';
+const HELPER = 'helper';
 const IconList = [
   {
     id: GRID,
@@ -48,15 +49,30 @@ const IconList = [
       }
       getEditor().dispatch.sceneGraphChanged();
     }
+  },
+  {
+    id: HELPER,
+    code: 'icon-fuzhu',
+    content: '辅助',
+    handle: () => {
+      globalConfig.isShowHelper = !globalConfig.isShowHelper;
+      if (globalConfig.isShowHelper) {
+        activeTool.value.push(HELPER);
+      } else {
+        activeTool.value = activeTool.value.filter((item) => item !== HELPER);
+      }
+      getEditor().sceneHelpers.visible = globalConfig.isShowHelper;
+      getEditor().dispatch.sceneGraphChanged();
+    }
   }
 ];
 const activeTool = ref([]);
 const setClass = (key) => {
   if (activeTool.value.includes(key)) {
-    return 'toolIcon active'
+    return 'toolIcon active';
   }
-  return 'toolIcon'
-}
+  return 'toolIcon';
+};
 
 const allViewpoints = computed(() => [...defaultCamera, ...viewpoints, ...customerCamera]);
 const change = (value) => {
@@ -66,12 +82,15 @@ const change = (value) => {
 
 onMounted(() => {
   if (globalConfig.isShowGrid) {
-    activeTool.value.push(GRID)
+    activeTool.value.push(GRID);
   }
   if (globalConfig.isShowAxis) {
-    activeTool.value.push(AXIS)
+    activeTool.value.push(AXIS);
   }
-})
+  if (globalConfig.isShowHelper) {
+    activeTool.value.push(HELPER);
+  }
+});
 </script>
 
 <style scoped lang="scss">

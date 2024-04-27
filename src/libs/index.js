@@ -60,6 +60,10 @@ export const isSpotLight = (object) => {
   if (!object) return;
   return object.isSpotLight;
 };
+export const isScene = (object) => {
+  if (!object) return
+  return object.isScene
+}
 export const isShowMaterialOrGeometry = (object) => {
   if (!object) return;
   if (
@@ -70,7 +74,8 @@ export const isShowMaterialOrGeometry = (object) => {
     isDirectionalLight(object) ||
     isHemisphereLight(object) ||
     isPointLight(object) ||
-    isSpotLight(object)
+    isSpotLight(object) || 
+    isScene(object)
   ) {
     return false;
   }
