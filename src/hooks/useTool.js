@@ -1,6 +1,7 @@
 import { ref } from 'vue';
 import { getEditor } from './useEditor';
 import { ElMessage } from 'element-plus';
+import { MODE } from '@/utils/Editor';
 
 export const useTool = () => {
   let editor;

@@ -136,11 +136,11 @@ const updateUI = (object) => {
 
 const registerEvent = () => {
   editor = getEditor();
-  editor.onEvent.objectSelected((selected) => {
+  editor.event.objectSelected.add((selected) => {
     selectedObj.value = selected;
     updateUI(selected);
   });
-  editor.onEvent.geometryChanged((selected) => {
+  editor.event.geometryChanged.add((selected) => {
     updateUI(selected);
   });
 };

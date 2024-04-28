@@ -3,25 +3,25 @@
 </template>
 
 <script setup>
-import viewport from '@/utils/Viewport'
+import viewport from '@/utils/Viewport';
 import { nextTick, onMounted } from 'vue';
-import { initEditor } from '@/hooks/useEditor'
+import { initEditor } from '@/hooks/useEditor';
 import { globalConfig, initConfig } from '@/hooks/useConfig';
 
-initConfig()
+initConfig();
 // TODO: 这里 editor.fromJSON 是异步加载的，后面改用异步组件
-const editor = initEditor()
+const editor = initEditor();
 
 onMounted(() => {
-  let v = new viewport(editor)
-  const { renderer: option } = globalConfig
+  let v = new viewport(editor);
+  const { renderer: option } = globalConfig;
   // 等viewport中dom加载完将渲染器挂载
-  editor.createRenderer(option)
+  editor.createRenderer(option);
   // 页面加载完自动调用一次
-  editor.dispatch.windowResize()
+  editor.event.windowResize.dispatch();
   // nextTick(() => {
   // })
-})
+});
 </script>
 
 <style scoped>

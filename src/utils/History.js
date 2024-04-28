@@ -13,11 +13,11 @@ class History {
 
     const scope = this;
 
-    this.editor.onEvent.startPlayer(() => {
+    this.editor.event.startPlayer.add(() => {
       scope.historyDisabled = true;
     });
 
-    this.editor.onEvent.stopPlayer(() => {
+    this.editor.event.stopPlayer.add(() => {
       scope.historyDisabled = false;
     });
   }
@@ -66,7 +66,7 @@ class History {
     // clearing all the redo-commands
 
     this.redos = [];
-    this.editor.dispatch.historyChanged(cmd);
+    this.editor.event.historyChanged.dispatch(cmd);
   }
 
   undo() {
@@ -88,7 +88,7 @@ class History {
     if (cmd !== undefined) {
       cmd.undo();
       this.redos.push(cmd);
-      this.editor.dispatch.historyChanged(cmd);
+      this.editor.event.historyChanged.dispatch(cmd);
     }
 
     return cmd;
@@ -113,7 +113,7 @@ class History {
     if (cmd !== undefined) {
       cmd.execute();
       this.undos.push(cmd);
-      this.editor.dispatch.historyChanged(cmd);
+      this.editor.event.historyChanged.dispatch(cmd);
     }
 
     return cmd;
@@ -174,7 +174,7 @@ class History {
     }
 
     // Select the last executed undo-command
-    this.editor.dispatch.historyChanged(this.undos[this.undos.length - 1]);
+    this.editor.event.historyChanged.dispatch(this.undos[this.undos.length - 1]);
   }
 
   clear() {
@@ -182,7 +182,7 @@ class History {
     this.redos = [];
     this.idCounter = 0;
 
-    this.editor.dispatch.historyChanged();
+    this.editor.event.historyChanged.dispatch();
   }
 
   goToState(id) {
@@ -214,8 +214,8 @@ class History {
     // this.editor.signals.sceneGraphChanged.active = true;
     // this.editor.signals.historyChanged.active = true;
 
-    this.editor.dispatch.sceneGraphChanged();
-    this.editor.dispatch.historyChanged(cmd);
+    this.editor.event.sceneGraphChanged.dispatch();
+    this.editor.event.historyChanged.dispatch(cmd);
   }
 
   enableSerialization(id) {

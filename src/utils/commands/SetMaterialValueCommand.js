@@ -32,16 +32,16 @@ class SetMaterialValueCommand extends Command {
     this.material[this.attributeName] = this.newValue;
     this.material.needsUpdate = true;
 
-    this.editor.dispatch.objectChanged(this.object);
-    this.editor.dispatch.materialChanged(this.object, this.materialSlot);
+    this.editor.event.objectChanged.dispatch(this.object);
+    this.editor.event.materialChanged.dispatch(this.object, this.materialSlot);
   }
 
   undo() {
     this.material[this.attributeName] = this.oldValue;
     this.material.needsUpdate = true;
 
-    this.editor.dispatch.objectChanged(this.object);
-    this.editor.dispatch.materialChanged(this.object, this.materialSlot);
+    this.editor.event.objectChanged.dispatch(this.object);
+    this.editor.event.materialChanged.dispatch(this.object, this.materialSlot);
   }
 
   update(cmd) {

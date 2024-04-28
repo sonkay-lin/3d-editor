@@ -34,14 +34,14 @@ class SetMaterialMapCommand extends Command {
     this.material[this.mapName] = this.newMap;
     this.material.needsUpdate = true;
 
-    this.editor.dispatch.materialChanged(this.object, this.materialSlot);
+    this.editor.event.materialChanged.dispatch(this.object, this.materialSlot);
   }
 
   undo() {
     this.material[this.mapName] = this.oldMap;
     this.material.needsUpdate = true;
 
-    this.editor.dispatch.materialChanged(this.object, this.materialSlot);
+    this.editor.event.materialChanged.dispatch(this.object, this.materialSlot);
   }
 
   toJSON() {

@@ -33,13 +33,13 @@ class SetRotationCommand extends Command {
   execute() {
     this.object.rotation.copy(this.newRotation);
     this.object.updateMatrixWorld(true);
-    this.editor.dispatch.objectChanged(this.object);
+    this.editor.event.objectChanged.dispatch(this.object);
   }
 
   undo() {
     this.object.rotation.copy(this.oldRotation);
     this.object.updateMatrixWorld(true);
-    this.editor.dispatch.objectChanged(this.object);
+    this.editor.event.objectChanged.dispatch(this.object);
   }
 
   update(command) {

@@ -16,7 +16,7 @@
     <MaterialRender />
 
     <el-form-item label="自定义数据">
-      <el-input v-model="formData.userData" :rows="2" type="textarea" />
+      <el-input v-model="formData.userData" @change="change('userData')" :rows="2" type="textarea" />
     </el-form-item>
   </FormLayout>
 </template>

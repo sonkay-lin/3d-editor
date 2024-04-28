@@ -33,7 +33,7 @@ const IconList = [
       } else {
         activeTool.value = activeTool.value.filter((item) => item !== GRID);
       }
-      getEditor().dispatch.sceneGraphChanged();
+      getEditor().evnet.sceneGraphChanged.dispatch();
     }
   },
   {
@@ -47,24 +47,24 @@ const IconList = [
       } else {
         activeTool.value = activeTool.value.filter((item) => item !== AXIS);
       }
-      getEditor().dispatch.sceneGraphChanged();
+      getEditor().evnet.sceneGraphChanged.dispatch();
     }
   },
-  {
-    id: HELPER,
-    code: 'icon-fuzhu',
-    content: '辅助',
-    handle: () => {
-      globalConfig.isShowHelper = !globalConfig.isShowHelper;
-      if (globalConfig.isShowHelper) {
-        activeTool.value.push(HELPER);
-      } else {
-        activeTool.value = activeTool.value.filter((item) => item !== HELPER);
-      }
-      getEditor().sceneHelpers.visible = globalConfig.isShowHelper;
-      getEditor().dispatch.sceneGraphChanged();
-    }
-  }
+  // {
+  //   id: HELPER,
+  //   code: 'icon-fuzhu',
+  //   content: '辅助',
+  //   handle: () => {
+  //     globalConfig.isShowHelper = !globalConfig.isShowHelper;
+  //     if (globalConfig.isShowHelper) {
+  //       activeTool.value.push(HELPER);
+  //     } else {
+  //       activeTool.value = activeTool.value.filter((item) => item !== HELPER);
+  //     }
+  //     getEditor().sceneHelpers.visible = globalConfig.isShowHelper;
+  //     getEditor().evnet.sceneGraphChanged.dispatch();
+  //   }
+  // }
 ];
 const activeTool = ref([]);
 const setClass = (key) => {

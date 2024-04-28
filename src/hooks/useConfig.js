@@ -33,36 +33,7 @@ const orgConfig = {
 };
 
 // 这里的配置需要一改变就保存到本地
-export const globalConfig = reactive({
-  // 网格
-  isShowGrid: true,
-  // 坐标轴
-  isShowAxis: false,
-  // 辅助线
-  isShowHelper: true,
-  // 吸附
-  isAdsorption: false,
-  // transform控制器
-  transform: {
-    mode: 'translate',
-    space: 'world',
-    showX: true,
-    showY: true,
-    showZ: true
-  },
-  renderer: {
-    // 抗锯齿
-    antialias: true,
-    // 阴影
-    shadowMap: {
-      enabled: false,
-      type: THREE.PCFShadowMap
-    },
-    // 色调映射
-    toneMapping: THREE.NoToneMapping
-    // toneMappingExposure
-  }
-});
+export const globalConfig = reactive(orgConfig);
 
 // 这里的配置需要用户自己保存
 export const sceneConfig = reactive({

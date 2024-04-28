@@ -72,7 +72,7 @@ const change = () => {
   } else if (sceneConfig.fogType === 'FogExp2') {
     editor.scene.fog = new THREE.FogExp2(fogColor.value, fogDensity.value);
   }
-  editor.dispatch.sceneGraphChanged();
+  editor.event.sceneGraphChanged.dispatch();
 };
 
 const settingChange = (type) => {
@@ -86,12 +86,12 @@ const settingChange = (type) => {
   } else if (type === 'density') {
     fog.density = fogDensity.value;
   }
-  editor.dispatch.sceneGraphChanged();
+  editor.event.sceneGraphChanged.dispatch();
 };
 
 onMounted(() => {
   editor = getEditor();
-  editor.onEvent.refreshSenceUI(() => {
+  editor.event.refreshSenceUI.add(() => {
     const { fog } = editor.scene;
     if (sceneConfig.fogType === 'Fog' && fog) {
       fogColor.value = fog.color.clone();

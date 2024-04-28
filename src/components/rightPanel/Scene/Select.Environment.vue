@@ -53,7 +53,7 @@ const environmentType = {
     }
   },
   ModelViewer: () => {
-    editor.dispatch.sceneEnvironmentChanged();
+    editor.event.sceneEnvironmentChanged.dispatch();
   }
 };
 const textureChange = (_texture) => {
@@ -65,7 +65,7 @@ const change = () => {
 };
 onMounted(() => {
   editor = getEditor();
-  editor.onEvent.refreshSenceUI(() => {
+  editor.event.refreshSenceUI.add(() => {
     if (selectValue.value === 'Equirectangular') {
       texture = editor.scene.environment;
       textureRef.value.setValue(texture);

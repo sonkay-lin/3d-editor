@@ -107,7 +107,6 @@ const handleCommand = (command) => {
 };
 
 const fileChange = (files) => {
-  console.log(fileInputRed.value.files);
   editor.loader.loadFiles(fileInputRed.value.files);
 };
 

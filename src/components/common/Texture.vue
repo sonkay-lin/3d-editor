@@ -56,7 +56,7 @@ function loadFile(file) {
       const blobURL = URL.createObjectURL(new Blob([arrayBuffer]));
       const ktx2Loader = new KTX2Loader();
       ktx2Loader.setTranscoderPath('../../examples/jsm/libs/basis/');
-      editor.dispatch.rendererDetectKTX2Support(ktx2Loader);
+      editor.event.rendererDetectKTX2Support.dispatch(ktx2Loader);
       ktx2Loader.load(blobURL, (_texture) => {
         _texture.colorSpace = THREE.SRGBColorSpace;
         _texture.sourceFile = file.name;

@@ -14,15 +14,14 @@
         code="icon-xifukaiqi"
         @click="handleAdsorption()"
       ></ICon>
-      <ICon v-else content="关闭网格吸附" code="icon-xifuguanbi" @click="handleAdsorption()"></ICon>
-      <ICon content="裁切物体" code="icon-qiege" @click="dev()"></ICon>
+      <ICon v-else content="关闭网格吸附" code="icon-xifuguanbi" @click="handleAdsorption()" />
+      <ICon content="模型剖切" code="icon-qiege" @click="clipping()" />
     </div>
     <div>
-      <ICon v-if="!isFullSceen" content="全屏" code="icon-quanping" @click="setFullSceen()"></ICon>
-      <ICon v-else content="退出全屏" code="icon-tuichuquanping" @click="setFullSceen()"></ICon>
+      <ICon v-if="!isFullSceen" content="全屏" code="icon-quanping" @click="setFullSceen()" />
+      <ICon v-else content="退出全屏" code="icon-tuichuquanping" @click="setFullSceen()" />
       <!-- <ICon content="预览" code="icon-yulan" @click="save()"></ICon> -->
-      <ICon content="保存(ctrl+s)" code="icon-baocun" @click="save()"></ICon>
-      <!-- <el-button class="save" type="primary" size="small" @click="save(sceneConfig)">保存</el-button> -->
+      <ICon content="保存(ctrl+s)" code="icon-baocun" @click="save(sceneConfig)" />
     </div>
   </div>
 </template>
@@ -33,6 +32,7 @@ import { RefreshLeft, RefreshRight, Delete } from '@element-plus/icons-vue';
 import File from './Menu.File.vue';
 import { useTool } from '@/hooks/useTool';
 import { globalConfig, sceneConfig } from '@/hooks/useConfig';
+import { getViewport } from '@/hooks/useViewport';
 
 const { isFullSceen, setFullSceen, delObject, dev, save } = useTool();
 
@@ -47,6 +47,11 @@ const command = (action) => {
 
 const handleAdsorption = () => {
   globalConfig.isAdsorption = !globalConfig.isAdsorption;
+};
+
+const clipping = () => {
+  const { useClipping } = getViewport();
+  useClipping();
 };
 </script>
 

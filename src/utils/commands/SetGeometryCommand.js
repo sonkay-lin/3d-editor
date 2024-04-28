@@ -28,8 +28,8 @@ class SetGeometryCommand extends Command {
     this.object.geometry = this.newGeometry;
     this.object.geometry.computeBoundingSphere();
 
-    this.editor.dispatch.geometryChanged(this.object);
-    this.editor.dispatch.sceneGraphChanged();
+    this.editor.event.geometryChanged.dispatch(this.object);
+    this.editor.event.sceneGraphChanged.dispatch();
   }
 
   undo() {
@@ -37,8 +37,8 @@ class SetGeometryCommand extends Command {
     this.object.geometry = this.oldGeometry;
     this.object.geometry.computeBoundingSphere();
 
-    this.editor.dispatch.geometryChanged(this.object);
-    this.editor.dispatch.sceneGraphChanged();
+    this.editor.event.geometryChanged.dispatch(this.object);
+    this.editor.event.sceneGraphChanged.dispatch();
   }
 
   update(cmd) {

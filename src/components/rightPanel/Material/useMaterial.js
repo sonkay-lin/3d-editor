@@ -1,6 +1,6 @@
 import { materialClasses, vertexShaderVariables } from './MaterialParameters';
 import { getEditor } from '@/hooks/useEditor';
-import { computed, ref, toRaw } from 'vue';
+import { computed, nextTick, ref, toRaw } from 'vue';
 import {
   SetMaterialCommand,
   SetMaterialValueCommand,
@@ -36,9 +36,18 @@ const commands = {
       material.vertexShader = vertexShaderVariables + material.vertexShader;
     }
     const newMaterial = material;
-    formData.value = material;
-    editor.execute(new SetMaterialCommand(object, newMaterial, 0), `修改材质类型`);
-    editor.addMaterial(newMaterial);
+    formData.value = {}
+    nextTick(() => {
+      formData.value = material;
+      formData.value.userData = JSON.stringify(material.userData)
+      if (Array.isArray(object.material)) {
+        editor.removeMaterial( object.material[ 0 ] );
+      } else {
+        editor.removeMaterial( object.material );
+      }
+      editor.execute(new SetMaterialCommand(object, newMaterial, 0), `修改材质类型`);
+      editor.addMaterial(newMaterial);
+    })
   },
   name: (object) => {
     editor.execute(new SetMaterialValueCommand(object, 'name', formData.value.name, 0));
@@ -160,12 +169,17 @@ const commands = {
   },
   wireframe: (object) => {
     editor.execute(new SetMaterialValueCommand(object, 'wireframe', formData.value.wireframe, 0));
+  },
+
+  userData: (object) => {
+    const userData = JSON.stringify()
+    editor.execute(new SetMaterialValueCommand(object, 'userData', userData, 0));
   }
 };
 
 const registerEvent = () => {
   editor = getEditor();
-  editor.onEvent.objectSelected((object) => {
+  editor.event.objectSelected.add((object) => {
     selectedObj.value = object;
     if (!object) {
       formData.value.type = '';
@@ -176,13 +190,16 @@ const registerEvent = () => {
     const { material } = selectedObj.value;
     formData.value = material.clone();
     formData.value.uuid = material.uuid;
+    formData.value.userData = JSON.stringify(material.userData);
   });
-  editor.onEvent.materialChanged((object) => {
+  editor.event.materialChanged.add((object) => {
     const selected = toRaw(selectedObj.value);
     if (!selected) return;
     const { material } = object;
+    console.log(object)
     formData.value = material.clone();
     formData.value.uuid = material.uuid;
+    formData.value.userData = JSON.stringify(material.userData);
     if (material.color !== undefined) {
       formData.value.color = material.color.clone();
     }

@@ -6,7 +6,7 @@ import * as THREE from 'three';
 // 鼠标交互事件
 
 export const mouseInteraction = ({ editor, dom, plane, controls, transformControls }) => {
-  const { scene, sceneHelpers, dispatch } = editor;
+  const { scene, sceneHelpers, event } = editor;
   const raycaster = new THREE.Raycaster();
   const mouse = new THREE.Vector2();
   // 获取相交的对象
@@ -42,50 +42,50 @@ export const mouseInteraction = ({ editor, dom, plane, controls, transformContro
   function handleClick() {
     if (onDownPosition.distanceTo(onUpPosition) === 0) {
       const intersects = getIntersects(onUpPosition);
-      dispatch.intersectionsDetected(intersects);
+      event.intersectionsDetected.dispatch(intersects);
     }
   }
   // 点击下去
-  function onMouseDown(event) {
+  function onMouseDown(e) {
     const { renderer } = editor;
-    // event.preventDefault();
-    if (event.target !== renderer.domElement) return;
-    const array = getMousePosition(dom, event.clientX, event.clientY);
+    // e.preventDefault();
+    if (e.target !== renderer.domElement) return;
+    const array = getMousePosition(dom, e.clientX, e.clientY);
     onDownPosition.fromArray(array);
     document.addEventListener('mouseup', onMouseUp);
   }
   // 点击松开
-  function onMouseUp(event) {
-    const array = getMousePosition(dom, event.clientX, event.clientY);
+  function onMouseUp(e) {
+    const array = getMousePosition(dom, e.clientX, e.clientY);
     onUpPosition.fromArray(array);
     handleClick();
 
-    dispatch.sceneGraphChanged();
+    event.sceneGraphChanged.dispatch();
     document.removeEventListener('mouseup', onMouseUp);
   }
   // 开始触摸
-  function onTouchStart(event) {
-    const touch = event.changedTouches[0];
+  function onTouchStart(e) {
+    const touch = e.changedTouches[0];
     const array = getMousePosition(dom, touch.clientX, touch.clientY);
     onDownPosition.fromArray(array);
     document.addEventListener('touchend', onTouchEnd);
   }
   // 触摸结束
-  function onTouchEnd(event) {
-    const touch = event.changedTouches[0];
+  function onTouchEnd(e) {
+    const touch = e.changedTouches[0];
     const array = getMousePosition(dom, touch.clientX, touch.clientY);
     onUpPosition.fromArray(array);
     handleClick();
     document.removeEventListener('touchend', onTouchEnd);
   }
   // 双击
-  function onDoubleClick(event) {
-    const array = getMousePosition(dom, event.clientX, event.clientY);
+  function onDoubleClick(e) {
+    const array = getMousePosition(dom, e.clientX, e.clientY);
     onDoubleClickPosition.fromArray(array);
     const intersects = getIntersects(onDoubleClickPosition);
     if (intersects.length > 0) {
       const intersect = intersects[0];
-      dispatch.objectFocused(intersect.object);
+      event.objectFocused.dispatch(intersect.object);
     }
   }
 
@@ -106,11 +106,11 @@ export const mouseInteraction = ({ editor, dom, plane, controls, transformContro
       addObject.material.opacity = 0.4;
     }
     // 将几何体放到平面上
-    if (addObject.geometry) {
+    // if (addObject.geometry) {
       const box = new THREE.Box3();
       box.setFromObject(addObject, true);
       objectHalfHeight = Math.abs(box.min.y);
-    }
+    // }
     sceneHelpers.add(addObject);
     // 轨道控制器禁用左键和右键
     controls.enablePan = false;
@@ -121,7 +121,7 @@ export const mouseInteraction = ({ editor, dom, plane, controls, transformContro
     dom.addEventListener('mousemove', onMouseMove);
     dom.addEventListener('click', onMouseDownAdd);
     document.addEventListener('contextmenu', cancelAdd);
-    dispatch.sceneGraphChanged();
+    event.sceneGraphChanged.dispatch();
   }
   function onMouseDownAdd() {
     const object = addObject.clone();
@@ -131,10 +131,10 @@ export const mouseInteraction = ({ editor, dom, plane, controls, transformContro
       object.material.opacity = 1;
     }
     editor.execute(new AddObjectCommand(object, false));
-    dispatch.sceneGraphChanged();
+    event.sceneGraphChanged.dispatch();
   }
-  function onMouseMove(event) {
-    const array = getMousePosition(dom, event.clientX, event.clientY);
+  function onMouseMove(e) {
+    const array = getMousePosition(dom, e.clientX, e.clientY);
     pointer.fromArray(array);
     const intersects = getIntersects(pointer);
     if (intersects.length === 0) return;
@@ -148,10 +148,10 @@ export const mouseInteraction = ({ editor, dom, plane, controls, transformContro
       addObject.position.z += 0.5;
     }
     addObject.position.y += objectHalfHeight;
-    dispatch.sceneGraphChanged();
+    event.sceneGraphChanged.dispatch();
   }
-  function cancelAdd(event) {
-    event?.preventDefault();
+  function cancelAdd(e) {
+    e?.preventDefault();
     editor.mode = MODE.DEFAULT;
     sceneHelpers.remove(addObject);
     addObject = null;
@@ -161,7 +161,7 @@ export const mouseInteraction = ({ editor, dom, plane, controls, transformContro
     dom.removeEventListener('mousemove', onMouseMove);
     document.removeEventListener('contextmenu', cancelAdd);
     resetEventListener();
-    dispatch.sceneGraphChanged();
+    event.sceneGraphChanged.dispatch();
   }
 
   function removeEventListener() {
@@ -182,7 +182,4 @@ export const mouseInteraction = ({ editor, dom, plane, controls, transformContro
   resetEventListener();
 
   return { addStart, cancelAdd };
-};
-const useAdsorption = (object, objectHalfHeight) => {
-  console.log(objectHalfHeight);
 };

@@ -25,12 +25,12 @@ class SetMaterialCommand extends Command {
 
   execute() {
     this.editor.setObjectMaterial(this.object, this.materialSlot, this.newMaterial);
-    this.editor.dispatch.materialChanged(this.object, this.materialSlot);
+    this.editor.event.materialChanged.dispatch(this.object, this.materialSlot);
   }
 
   undo() {
     this.editor.setObjectMaterial(this.object, this.materialSlot, this.oldMaterial);
-    this.editor.dispatch.materialChanged(this.object, this.materialSlot);
+    this.editor.event.materialChanged.dispatch(this.object, this.materialSlot);
   }
 
   toJSON() {

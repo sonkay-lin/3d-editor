@@ -35,25 +35,25 @@ class SetSceneCommand extends Command {
   }
 
   execute() {
-    // this.editor.signals.sceneGraphChanged.active = false;
+    this.editor.event.sceneGraphChanged.active = false;
 
     for (let i = 0; i < this.cmdArray.length; i++) {
       this.cmdArray[i].execute();
     }
 
-    // this.editor.signals.sceneGraphChanged.active = true;
-    this.editor.dispatch.sceneGraphChanged();
+    this.editor.event.sceneGraphChanged.active = true;
+    this.editor.event.sceneGraphChanged.dispatch();
   }
 
   undo() {
-    // this.editor.signals.sceneGraphChanged.active = false;
+    this.editor.event.sceneGraphChanged.active = false;
 
     for (let i = this.cmdArray.length - 1; i >= 0; i--) {
       this.cmdArray[i].undo();
     }
 
-    // this.editor.signals.sceneGraphChanged.active = true;
-    this.editor.dispatch.sceneGraphChanged();
+    this.editor.event.sceneGraphChanged.active = true;
+    this.editor.event.sceneGraphChanged.dispatch();
   }
 
   toJSON() {

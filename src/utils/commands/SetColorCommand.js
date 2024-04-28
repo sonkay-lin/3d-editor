@@ -25,12 +25,12 @@ class SetColorCommand extends Command {
   execute() {
     // this.object[this.attributeName].setHex(this.newValue);
     this.object[this.attributeName] = this.newValue;
-    this.editor.dispatch.objectChanged(this.object);
+    this.editor.event.objectChanged.dispatch(this.object);
   }
 
   undo() {
     this.object[this.attributeName] = this.oldValue;
-    this.editor.dispatch.objectChanged(this.object);
+    this.editor.event.objectChanged.dispatch(this.object);
   }
 
   update(cmd) {

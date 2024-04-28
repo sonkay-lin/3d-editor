@@ -102,9 +102,9 @@ onMounted(async () => {
   editor = getEditor();
   // 事件先触发MapTure组件才被创建，监听事件是在触发后创建的,
   // 所以不会触发objectSelected,所以采用useMaterial中的selectedObj
-  // editor.onEvent.objectSelected(objectSelected);
+  // editor.event.objectSelected.add(objectSelected);
   objectSelected(selectedObj.value);
-  editor.onEvent.materialChanged(materialChanged);
+  editor.event.materialChanged.add(materialChanged);
 });
 onUnmounted(() => {
   // offEvent.objectSelected(objectSelected);

@@ -49,7 +49,7 @@ const formData = reactive({
   visible: true,
   frustumcull: true, //视锥体裁剪
   renderOrder: 0, //渲染次序
-  userDate: {}
+  userData: '{}'
 });
 
 const commands = {
@@ -159,7 +159,14 @@ const commands = {
     editor.execute(new SetValueCommand(object, 'renderOrder', formData.renderOrder));
   },
   userData: (object) => {
-    editor.execute(new SetValueCommand(object, 'userData', formData.userData));
+    try {
+      const userData = JSON.parse(formData.userData);
+      if (JSON.stringify(object.userData) != JSON.stringify(userData)) {
+        editor.execute(new SetValueCommand(editor, object, 'userData', userData));
+      }
+    } catch (error) {
+      console.warn(error);
+    }
   }
 };
 
@@ -187,7 +194,7 @@ const updateUI = (object) => {
       formData[key] = rotationToInput(object[key]);
       return;
     }
-    if (isObject(object[key])) {
+    if (isObject(object[key]) && key !== 'userData') {
       if (key === 'shadow') {
         // formData[key] = deepcopy(object[key])
         Object.keys(formData[key]).forEach((k) => {
@@ -200,18 +207,19 @@ const updateUI = (object) => {
     }
     formData[key] = object[key];
   });
+  formData.userData = JSON.stringify(selected.userData);
 };
 
 const registerEvent = () => {
   editor = getEditor();
-  editor.onEvent.objectSelected((object) => {
+  editor.event.objectSelected.add((object) => {
     selectedObj.value = object;
     updateUI(object);
   });
-  editor.onEvent.refreshSidebarObject3D((object) => {
+  editor.event.refreshSidebarObject3D.add((object) => {
     updateUI(object);
   });
-  editor.onEvent.objectChanged((object) => {
+  editor.event.objectChanged.add((object) => {
     updateUI(object);
   });
 };

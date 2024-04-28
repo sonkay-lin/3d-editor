@@ -11,7 +11,7 @@ export const initEditor = () => {
       if (state !== undefined) {
         editor.fromJSON(state);
       } else {
-        editor.dispatch.editorCreated()
+        editor.event.editorCreated.dispatch()
       }
 
       // TODO

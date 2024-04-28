@@ -845,7 +845,7 @@ function Loader(editor) {
     // ktx2Loader.setTranscoderPath('three/examples/jsm/libs/basis/');
     ktx2Loader.setTranscoderPath('./basis/');
 
-    editor.dispatch.rendererDetectKTX2Support(ktx2Loader);
+    editor.event.rendererDetectKTX2Support.dispatch(ktx2Loader);
 
     const loader = new GLTFLoader(manager);
     loader.setDRACOLoader(dracoLoader);

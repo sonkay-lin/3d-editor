@@ -55,12 +55,12 @@ module.exports = defineConfig({
   //     cdn: cdn
   //   }
   // }
-  chainWebpack: (config) => {
-    // if (isProduction) {
-    //   config.plugin('html').tap((args) => {
-    //     args[0].cdn = cdn;
-    //     return args;
-    //   });
-    // }
-  }
+  // chainWebpack: (config) => {
+  //   if (isProduction) {
+  //     config.plugin('html').tap((args) => {
+  //       args[0].cdn = cdn;
+  //       return args;
+  //     });
+  //   }
+  // }
 });

@@ -34,7 +34,7 @@ const udpdateRenderer = () => {
   editor.renderer.shadowMap.enabled = shadowMap.enabled;
   editor.renderer.shadowMap.type = parseFloat(shadowMap.type);
   editor.renderer.toneMapping = parseFloat(toneMapping);
-  editor.dispatch.rendererUpdated();
+  editor.event.rendererUpdated.dispatch();
 };
 
 onMounted(() => {

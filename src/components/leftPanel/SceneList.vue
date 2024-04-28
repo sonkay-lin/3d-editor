@@ -102,7 +102,6 @@ const updateTree = () => {
       parentNode.children.push(node);
     }
   });
-  console.log(treeData, treeStore);
   defaultExpandedKeys.value.push(scene.id);
 };
 // 给树形组件仓库添加新节点
@@ -159,9 +158,9 @@ const selection = (object) => {
 
 onMounted(() => {
   editor = getEditor();
-  editor.onEvent.editorCreated(() => {
+  editor.event.editorCreated.add(() => {
     updateTree();
-    editor.onEvent.objectAdded((object) => {
+    editor.event.objectAdded.add((object) => {
       const node = storeSetValue(object);
       if (!node) return;
       const parentNode = treeStore.value.get(node.parentId);
@@ -176,20 +175,20 @@ onMounted(() => {
         }
       });
     });
-    editor.onEvent.objectRemoved((object) => {
+    editor.event.objectRemoved.add((object) => {
       const { id } = object;
       const node = treeStore.value.get(id);
       const parentNode = treeStore.value.get(node.parentId);
       parentNode.children = parentNode.children.filter((item) => item.id !== id);
       treeStore.value.delete(id);
     });
-    editor.onEvent.objectSelected((object) => {
+    editor.event.objectSelected.add((object) => {
       nextTick(() => {
         curretnKey.value = object ? object.id : null;
       });
     });
     // 修改对象名称和显示时更新树组件UI
-    editor.onEvent.refreshObjectUI((object, attrs) => {
+    editor.event.refreshObjectUI.add((object, attrs) => {
       const node = treeStore.value.get(object.id);
       if (!node) return;
       node.name = object.name;
@@ -200,7 +199,7 @@ onMounted(() => {
       });
     });
     // 移动树组件对象时
-    editor.onEvent.refreshTreeUI(({ object, parent: parentObject }) => {
+    editor.event.refreshTreeUI.add(({ object, parent: parentObject }) => {
       const node = treeStore.value.get(object.id);
       const oldParent = treeStore.value.get(node.parentId);
       oldParent.children = oldParent.children.filter((child) => child.id !== node.id);
@@ -208,11 +207,6 @@ onMounted(() => {
       node.parentId = newParent.id;
       if (newParent.children.some((child) => child.id === node.id)) return;
       newParent.children.push(node);
-    });
-  });
-  editor.onEvent.editorCleared(() => {
-    editor.scene.traverse((child) => {
-      console.log(child);
     });
   });
 });

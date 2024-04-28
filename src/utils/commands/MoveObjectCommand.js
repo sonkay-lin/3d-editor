@@ -42,8 +42,8 @@ class MoveObjectCommand extends Command {
     this.object.parent = this.newParent;
 
     this.object.dispatchEvent({ type: 'added' });
-    this.editor.dispatch.refreshTreeUI({ object: this.object, parent: this.newParent });
-    this.editor.dispatch.sceneGraphChanged();
+    this.editor.event.refreshTreeUI.dispatch({ object: this.object, parent: this.newParent });
+    this.editor.event.sceneGraphChanged.dispatch();
   }
 
   undo() {
@@ -54,8 +54,8 @@ class MoveObjectCommand extends Command {
     this.object.parent = this.oldParent;
 
     this.object.dispatchEvent({ type: 'added' });
-    this.editor.dispatch.refreshTreeUI({ object: this.object, parent: this.oldParent });
-    this.editor.dispatch.sceneGraphChanged();
+    this.editor.event.refreshTreeUI.dispatch({ object: this.object, parent: this.oldParent });
+    this.editor.event.sceneGraphChanged.dispatch();
   }
 
   toJSON() {

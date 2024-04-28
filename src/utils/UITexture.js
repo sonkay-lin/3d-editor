@@ -180,8 +180,7 @@ class UITexture extends UISpan {
           const blobURL = URL.createObjectURL(new Blob([arrayBuffer]));
           const ktx2Loader = new KTX2Loader();
           ktx2Loader.setTranscoderPath('../../examples/jsm/libs/basis/');
-          //TODO:
-          // editor.signals.rendererDetectKTX2Support.dispatch(ktx2Loader);
+          editor.event.rendererDetectKTX2Support.dispatch(ktx2Loader);
 
           ktx2Loader.load(blobURL, function (texture) {
             texture.colorSpace = THREE.SRGBColorSpace;

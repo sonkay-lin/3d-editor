@@ -76,11 +76,11 @@ class SetValueCommand extends Command {
       }
     }
     // this.object[this.attributeName] = this.newValue;
-    this.editor.dispatch.objectChanged(this.object);
+    this.editor.event.objectChanged.dispatch(this.object);
     // this.editor.signals.sceneGraphChanged.dispatch();
     // 如果是name属性，刷新页面ui
     if (this.attributeName === 'name' || this.attributeName === 'visible') {
-      this.editor.dispatch.refreshObjectUI(this.object, this.attributeName);
+      this.editor.event.refreshObjectUI.dispatch(this.object, this.attributeName);
     }
   }
 
@@ -95,11 +95,11 @@ class SetValueCommand extends Command {
       }
     }
     // this.object[this.attributeName] = this.oldValue;
-    this.editor.dispatch.objectChanged(this.object);
+    this.editor.event.objectChanged.dispatch(this.object);
     // this.editor.signals.sceneGraphChanged.dispatch();
     // 如果是name属性，刷新页面ui
     if (this.attributeName === 'name' || this.attributeName === 'visible') {
-      this.editor.dispatch.refreshObjectUI(this.object, this.attributeName);
+      this.editor.event.refreshObjectUI.dispatch(this.object, this.attributeName);
     }
   }
 

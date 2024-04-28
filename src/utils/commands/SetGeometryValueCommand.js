@@ -24,16 +24,16 @@ class SetGeometryValueCommand extends Command {
 
   execute() {
     this.object.geometry[this.attributeName] = this.newValue;
-    this.editor.dispatch.objectChanged(this.object);
-    this.editor.dispatch.geometryChanged(this.object);
-    this.editor.dispatch.sceneGraphChanged();
+    this.editor.event.objectChanged.dispatch(this.object);
+    this.editor.event.geometryChanged.dispatch(this.object);
+    this.editor.event.sceneGraphChanged.dispatch();
   }
 
   undo() {
     this.object.geometry[this.attributeName] = this.oldValue;
-    this.editor.dispatch.objectChanged(this.object);
-    this.editor.dispatch.geometryChanged(this.object);
-    this.editor.dispatch.sceneGraphChanged();
+    this.editor.event.objectChanged.dispatch(this.object);
+    this.editor.event.geometryChanged.dispatch(this.object);
+    this.editor.event.sceneGraphChanged.dispatch();
   }
 
   toJSON() {

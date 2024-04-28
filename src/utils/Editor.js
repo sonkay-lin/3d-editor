@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { Selector } from './Viewport.Selector';
-import Event, { onEvent, dispatch } from '@/utils/event/index';
+import { dispatch, signals } from '@/utils/event/index';
 import { History as _History } from './History.js';
 import { Storage as _Storage } from './Storage.js';
 import { Loader } from './file/Loader';
@@ -11,7 +11,7 @@ const _DEFAULT_CAMERA = new THREE.PerspectiveCamera(50, 1, 0.01, 1000);
 _DEFAULT_CAMERA.name = '默认相机';
 _DEFAULT_CAMERA.position.set(0, 5, 10);
 _DEFAULT_CAMERA.lookAt(new THREE.Vector3());
-// 视角相机
+// 视图相机切换上下左右前后视图
 const { aspect } = _DEFAULT_CAMERA;
 const _VIEW_POINT_CAMERA = new THREE.OrthographicCamera(-aspect, aspect);
 _VIEW_POINT_CAMERA.name = '场景视角';
@@ -20,14 +20,14 @@ _VIEW_POINT_CAMERA.lookAt(new THREE.Vector3(0, 0, 0));
 
 export const MODE = {
   ADD: 'add',
-  EDIT: 'edit',
+  // EDIT: 'edit',
+  CLIPPING: 'clipping',
   DEFAULT: 'default'
 };
 
 function Editor() {
-  this.onEvent = onEvent;
   this.dispatch = dispatch;
-  this.event = Event;
+  this.event = signals;
   // 选择器
   this.selector = new Selector(this);
   // 选中物体
@@ -86,8 +86,8 @@ Editor.prototype = {
     this.renderer.toneMapping = parseFloat(toneMapping);
     // 色调映射的曝光级别。默认是1
     // this.renderer.toneMappingExposure = toneMappingExposure;
-    dispatch.rendererCreated(this.renderer);
-    dispatch.rendererUpdated();
+    this.event.rendererCreated.dispatch(this.renderer);
+    this.event.rendererUpdated.dispatch();
   },
   setScene: function (scene) {
     this.scene.uuid = scene.uuid;
@@ -98,13 +98,12 @@ Editor.prototype = {
     this.scene.backgroundBlurriness = scene.backgroundBlurriness;
     this.scene.backgroundIntensity = scene.backgroundIntensity;
     this.scene.userData = JSON.parse(JSON.stringify(scene.userData));
-    // TODO: 改用signals不然事件会频繁触发
-    // this.signals.sceneGraphChanged.active = false;
+    this.event.sceneGraphChanged.active = false;
     while (scene.children.length > 0) {
       this.addObject(scene.children[0]);
     }
-    // this.signals.sceneGraphChanged.active = true;
-    this.dispatch.refreshSenceUI();
+    this.event.sceneGraphChanged.active = true;
+    this.event.refreshSenceUI.dispatch();
   },
 
   objectByUuid: function (uuid) {
@@ -134,8 +133,8 @@ Editor.prototype = {
       parent.children.splice(index, 0, object);
       object.parent = parent;
     }
-    this.dispatch.objectAdded(object);
-    this.dispatch.sceneGraphChanged();
+    this.event.objectAdded.dispatch(object);
+    this.event.sceneGraphChanged.dispatch();
   },
   // ui移动对象
   moveObject: function (object, parent, before) {
@@ -149,11 +148,11 @@ Editor.prototype = {
       parent.children.splice(index, 0, object);
       parent.children.pop();
     }
-    this.dispatch.sceneGraphChanged();
+    this.event.sceneGraphChanged.dispatch();
   },
   nameObject: function (object, name) {
     object.name = name;
-    this.dispatch.sceneGraphChanged();
+    this.event.sceneGraphChanged.dispatch();
   },
   // 删除对象
   removeObject: function (object) {
@@ -165,21 +164,21 @@ Editor.prototype = {
       if (child.material !== undefined) scope.removeMaterial(child.material);
     });
     object.parent.remove(object);
-    this.dispatch.objectRemoved(object);
-    this.dispatch.sceneGraphChanged();
+    this.event.objectRemoved.dispatch(object);
+    this.event.sceneGraphChanged.dispatch();
   },
   // 添加相机
   addCamera: function (camera) {
     if (camera.isCamera) {
       this.cameras[camera.uuid] = camera;
-      this.dispatch.cameraAdded(camera);
+      this.event.cameraAdded.dispatch(camera);
     }
   },
   // 移除相机
   removeCamera: function (camera) {
     if (this.cameras[camera.uuid] !== undefined) {
       delete this.cameras[camera.uuid];
-      this.dispatch.cameraRemoved(camera);
+      this.event.cameraRemoved.dispatch(camera);
     }
   },
   // 添加辅助线
@@ -214,7 +213,7 @@ Editor.prototype = {
       this.sceneHelpers.add(helper);
       this.helpers[object.id] = helper;
 
-      this.dispatch.helperAdded(helper);
+      this.event.helperAdded.dispatch(helper);
     };
   })(),
   // 移除辅助对象
@@ -223,7 +222,7 @@ Editor.prototype = {
       let helper = this.helpers[object.id];
       helper.parent.remove(helper);
       delete this.helpers[object.id];
-      this.dispatch.helperRemoved(helper);
+      this.event.helperRemoved.dispatch(helper);
     }
   },
   // 添加几何
@@ -233,7 +232,7 @@ Editor.prototype = {
   // 修改几何名称
   setGeometryName: function (geometry, name) {
     geometry.name = name;
-    this.dispatch.sceneGraphChanged();
+    this.event.sceneGraphChanged.dispatch();
   },
   // 根据id获取材质
   getMaterialById: function (id) {
@@ -272,7 +271,7 @@ Editor.prototype = {
     } else {
       this.addMaterialToRefCounter(material);
     }
-    this.dispatch.materialAdded();
+    this.event.materialAdded.dispatch();
   },
   // 将材质添加到映射表里，并设置被引用的次数
   addMaterialToRefCounter: function (material) {
@@ -289,7 +288,7 @@ Editor.prototype = {
   // 设置材质名称
   setMaterialName: function (material, name) {
     material.name = name;
-    this.signals.sceneGraphChanged.dispatch();
+    this.event.sceneGraphChanged.dispatch();
   },
   // 添加材质
   addTexture: function (texture) {
@@ -304,7 +303,7 @@ Editor.prototype = {
     } else {
       this.removeMaterialFromRefCounter(material);
     }
-    this.dispatch.materialRemoved();
+    this.event.materialRemoved.dispatch();
   },
   // 移除映射表里的材质
   removeMaterialFromRefCounter: function (material) {
@@ -331,9 +330,9 @@ Editor.prototype = {
   // 聚焦到物体上
   focus: function (object) {
     if (object !== undefined) {
-      // this.dispatch.objectFocused(object);
+      // this.event.objectFocused.dispatch(object);
       // this.viewportCamera.position.copy(object.position);
-      // dispatch.sceneGraphChanged();
+      // event.sceneGraphChanged.dispatch();
     }
   },
   focusById: function (id) {
@@ -359,11 +358,11 @@ Editor.prototype = {
   // 设置
   setViewportCamera: function (uuid) {
     this.viewportCamera = this.cameras[uuid];
-    this.dispatch.viewportCameraChanged();
+    this.event.viewportCameraChanged.dispatch();
   },
   setViewportShading: function (value) {
     this.viewportShading = value;
-    this.dispatch.viewportShadingChanged();
+    this.event.viewportShadingChanged.dispatch();
   },
 
   // 执行命令
@@ -385,7 +384,7 @@ Editor.prototype = {
     let camera = await loader.parseAsync(json.camera);
 
     this.camera.copy(camera);
-    this.dispatch.cameraResetted();
+    this.event.cameraResetted.dispatch();
 
     this.history.fromJSON(json.history);
     this.scripts = json.scripts;
@@ -393,11 +392,11 @@ Editor.prototype = {
     this.setScene(await loader.parseAsync(json.scene));
 
     if (json.environment === 'ModelViewer') {
-      // TODO
-      // this.signals.sceneEnvironmentChanged.dispatch(json.environment);
+      this.event.sceneEnvironmentChanged.event(json.environment);
     }
     console.log(`初始化editor完成：${performance.now() - start}`);
-    dispatch.editorCreated();
+    this.event.editorCreated.dispatch();
+    this.event.sceneGraphChanged.dispatch();
   },
   toJSON: function () {
     // scripts clean up
@@ -435,7 +434,7 @@ Editor.prototype = {
     this.storage.clear();
 
     this.camera.copy(_DEFAULT_CAMERA);
-    this.dispatch.cameraResetted();
+    this.event.cameraResetted.dispatch();
 
     this.scene.name = 'Scene';
     this.scene.userData = {};
@@ -447,13 +446,13 @@ Editor.prototype = {
 
     resetConfig();
 
-    // this.signals.sceneGraphChanged.active = false;
+    this.event.sceneGraphChanged.active = false;
 
     while (objects.length > 0) {
       this.removeObject(objects[0]);
     }
 
-    // this.signals.sceneGraphChanged.active = true;
+    this.event.sceneGraphChanged.active = true;
 
     this.geometries = {};
     this.materials = {};
@@ -467,7 +466,7 @@ Editor.prototype = {
 
     this.deselect();
 
-    this.dispatch.editorCleared();
+    this.event.editorCleared.dispatch();
   }
 };
 

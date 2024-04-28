@@ -33,13 +33,13 @@ class SetScaleCommand extends Command {
   execute() {
     this.object.scale.copy(this.newScale);
     this.object.updateMatrixWorld(true);
-    this.editor.dispatch.objectChanged(this.object);
+    this.editor.event.objectChanged.dispatch(this.object);
   }
 
   undo() {
     this.object.scale.copy(this.oldScale);
     this.object.updateMatrixWorld(true);
-    this.editor.dispatch.objectChanged(this.object);
+    this.editor.event.objectChanged.dispatch(this.object);
   }
 
   update(command) {

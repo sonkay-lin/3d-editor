@@ -23,14 +23,14 @@ class SetUuidCommand extends Command {
 
   execute() {
     this.object.uuid = this.newUuid;
-    this.editor.dispatch.objectChanged(this.object);
-    this.editor.dispatch.sceneGraphChanged();
+    this.editor.event.objectChanged.dispatch(this.object);
+    this.editor.event.sceneGraphChanged.dispatch();
   }
 
   undo() {
     this.object.uuid = this.oldUuid;
-    this.editor.dispatch.objectChanged(this.object);
-    this.editor.dispatch.sceneGraphChanged();
+    this.editor.event.objectChanged.dispatch(this.object);
+    this.editor.event.sceneGraphChanged.dispatch();
   }
 
   toJSON() {

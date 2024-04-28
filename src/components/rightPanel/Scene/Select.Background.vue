@@ -71,11 +71,11 @@ const backgroundList = [
 const backgroundType = {
   None: () => {
     editor.scene.background = null;
-    editor.dispatch.sceneGraphChanged();
+    editor.event.sceneGraphChanged.dispatch();
   },
   Color: () => {
     editor.scene.background = color.value;
-    editor.dispatch.sceneGraphChanged();
+    editor.event.sceneGraphChanged.dispatch();
   },
   Texture: () => {
     if (!backgroundTexture) return;
@@ -84,7 +84,7 @@ const backgroundType = {
       textureRef.value.setValue(backgroundTexture);
     }
     editor.scene.background = backgroundTexture;
-    editor.dispatch.sceneGraphChanged();
+    editor.event.sceneGraphChanged.dispatch();
   },
   Equirectangular: () => {
     if (!equirectangularTexture) return;
@@ -96,7 +96,7 @@ const backgroundType = {
     editor.scene.background = equirectangularTexture;
     editor.scene.backgroundBlurriness = backgroundBlurriness.value;
     editor.scene.backgroundIntensity = backgroundIntensity.value;
-    editor.dispatch.sceneGraphChanged();
+    editor.event.sceneGraphChanged.dispatch();
   }
 };
 // 获取背景贴图
@@ -120,7 +120,7 @@ const numberChange = (type) => {
   } else if (type === 'backgroundIntensity') {
     editor.scene.backgroundIntensity = backgroundIntensity.value;
   }
-  editor.dispatch.sceneGraphChanged();
+  editor.event.sceneGraphChanged.dispatch();
 };
 // 修改背景类型
 const change = () => {
@@ -130,7 +130,7 @@ const change = () => {
 onMounted(() => {
   editor = getEditor();
   // 场景加载完，将UI赋值为已有的数据
-  editor.onEvent.refreshSenceUI(() => {
+  editor.event.refreshSenceUI.add(() => {
     if (selectValue.value === 'Color') {
       color.value = editor.scene.background;
     } else if (selectValue.value === 'Texture') {

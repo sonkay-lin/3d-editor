@@ -20,7 +20,7 @@ const camerasList = ref([]);
 onMounted(() => {
   editor = getEditor();
   // 如果相机物体名字被修改,更新select label名字
-  editor.onEvent.refreshObjectUI((object, attrs) => {
+  editor.event.refreshObjectUI.add((object, attrs) => {
     // TODO: attrs is undefined
     if (!object.isCamera) return
     for(let i = 0; i < customerCamera.length; i++) {
@@ -32,7 +32,7 @@ onMounted(() => {
       }
     }
   })
-  editor.onEvent.cameraAdded((camera) => {
+  editor.event.cameraAdded.add((camera) => {
     customerCamera.push({
       value: camera.uuid,
       label: camera.name,
@@ -41,7 +41,7 @@ onMounted(() => {
       }
     });
   });
-  editor.onEvent.cameraRemoved((camera) => {
+  editor.event.cameraRemoved.add((camera) => {
     const index = customerCamera.findIndex((item) => item.value === camera.uuid);
     index > -1 && customerCamera.splice(index, 1);
   });

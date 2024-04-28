@@ -23,12 +23,12 @@ class SetMaterialVectorCommand extends Command {
 
   execute() {
     this.material[this.attributeName].fromArray(this.newValue);
-    this.editor.dispatch.materialChanged(this.object, this.materialSlot);
+    this.editor.event.materialChanged.dispatch(this.object, this.materialSlot);
   }
 
   undo() {
     this.material[this.attributeName].fromArray(this.oldValue);
-    this.editor.dispatch.materialChanged(this.object, this.materialSlot);
+    this.editor.event.materialChanged.dispatch(this.object, this.materialSlot);
   }
 
   update(cmd) {
