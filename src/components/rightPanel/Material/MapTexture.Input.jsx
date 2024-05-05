@@ -60,7 +60,7 @@ export default defineComponent({
         return (
           <>
             <div>
-              <div>
+              <div class="row">
                 <span>min:</span>
                 <SlideInput
                   onlyNumber
@@ -72,7 +72,7 @@ export default defineComponent({
                   onChange={() => change(range)}
                 />
               </div>
-              <div>
+              <div class="row">
                 <span>max:</span>
                 <SlideInput
                   onlyNumber

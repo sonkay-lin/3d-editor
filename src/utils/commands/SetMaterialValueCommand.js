@@ -9,8 +9,8 @@ import { Command } from '../Command.js';
  * @constructor
  */
 class SetMaterialValueCommand extends Command {
-  constructor(object, attributeName, newValue, materialSlot ) {
-    const editor = getEditor()
+  constructor(object, attributeName, newValue, materialSlot) {
+    const editor = getEditor();
     super(editor);
 
     this.type = 'SetMaterialValueCommand';

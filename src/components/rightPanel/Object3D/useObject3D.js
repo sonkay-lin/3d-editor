@@ -187,7 +187,7 @@ const change = (params) => {
 
 const updateUI = (object) => {
   const selected = toRaw(selectedObj.value);
-  if (!object || selected !== editor.selected) return;
+  if (!object || !selected || selected !== editor.selected) return;
   Object.keys(formData).forEach((key) => {
     if (object[key] === undefined) return;
     if (key === 'rotation') {

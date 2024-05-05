@@ -1,7 +1,7 @@
 import { computed, defineComponent, onMounted } from 'vue';
 import { useObject3D } from './useObject3D';
 import { getEditor } from '@/hooks/useEditor';
-import { ElFormItem, ElCheckbox } from 'element-plus'
+import { ElFormItem, ElCheckbox } from 'element-plus';
 import SlideInput from '@/components/common/SlideInput.vue';
 import Color from '@/components/common/Color.vue';
 
@@ -13,15 +13,18 @@ export default defineComponent({
     // 旋转
     const rotation = () => (
       <>
-        <ElFormItem label="旋转">
-          <div>
-            x：<SlideInput v-model:value={formData.rotation.x} onChange={() => change('rotation')}></SlideInput>
+        <ElFormItem class="wrap-content" label="旋转">
+          <div class="row">
+            x：
+            <SlideInput v-model:value={formData.rotation.x} step={1} onChange={() => change('rotation')}></SlideInput>
           </div>
-          <div>
-            y：<SlideInput v-model:value={formData.rotation.y} onChange={() => change('rotation')}></SlideInput>
+          <div class="row">
+            y：
+            <SlideInput v-model:value={formData.rotation.y} step={1} onChange={() => change('rotation')}></SlideInput>
           </div>
-          <div>
-            z：<SlideInput v-model:value={formData.rotation.z} onChange={() => change('rotation')}></SlideInput>
+          <div class="row">
+            z：
+            <SlideInput v-model:value={formData.rotation.z} step={1} onChange={() => change('rotation')}></SlideInput>
           </div>
         </ElFormItem>
       </>
@@ -30,14 +33,14 @@ export default defineComponent({
     // 缩放
     const scale = () => (
       <>
-        <ElFormItem label="缩放">
-          <div>
+        <ElFormItem class="wrap-content" label="缩放">
+          <div class="row">
             x：<SlideInput v-model:value={formData.scale.x} onChange={() => change('scale')}></SlideInput>
           </div>
-          <div>
+          <div class="row">
             y：<SlideInput v-model:value={formData.scale.y} onChange={() => change('scale')}></SlideInput>
           </div>
-          <div>
+          <div class="row">
             z：<SlideInput v-model:value={formData.scale.z} onChange={() => change('scale')}></SlideInput>
           </div>
         </ElFormItem>
@@ -166,35 +169,31 @@ export default defineComponent({
         </ElFormItem>
       </>
     );
-
+    const most = () => {
+      const html = [];
+      html.push(rotation());
+      html.push(scale());
+      html.push(shadow());
+      return html;
+    };
     const content = {
       Mesh: () => {
-        const html = [];
-        html.push(rotation());
-        html.push(scale());
-        html.push(shadow());
-        return html;
+        return most();
       },
       Scene: () => {
-        const html = [];
-        html.push(rotation());
-        html.push(scale());
-        html.push(shadow());
-        return html;
+        return most();
+      },
+      Line: () => {
+        return most();
       },
       Group: () => {
-        const html = [];
-        html.push(rotation());
-        html.push(scale());
-        html.push(shadow());
-        return html;
+        return most();
       },
       Sprite: () => {
-        const html = [];
-        html.push(rotation());
-        html.push(scale());
-        html.push(shadow());
-        return html;
+        return most();
+      },
+      Points: () => {
+        return most();
       },
       AmbientLight: () => {
         return lightBase();

@@ -7,11 +7,13 @@ import * as THREE from 'three';
 
 export const mouseInteraction = ({ editor, dom, plane, controls, transformControls }) => {
   const { scene, sceneHelpers, event } = editor;
+
   const raycaster = new THREE.Raycaster();
   const mouse = new THREE.Vector2();
   // 获取相交的对象
   function getIntersects(point) {
     const { camera } = editor;
+
     mouse.set(point.x * 2 - 1, -(point.y * 2) + 1);
     raycaster.setFromCamera(mouse, camera);
 
@@ -89,8 +91,10 @@ export const mouseInteraction = ({ editor, dom, plane, controls, transformContro
     }
   }
 
+  // 要添加的物体
   let addObject = null;
-  let objectHalfHeight = 0;
+  // 物体距离地面的高度
+  let objectDistanceGround = 0;
   function addStart(object) {
     editor.mode = MODE.ADD;
     transformControls.detach();
@@ -106,11 +110,9 @@ export const mouseInteraction = ({ editor, dom, plane, controls, transformContro
       addObject.material.opacity = 0.4;
     }
     // 将几何体放到平面上
-    // if (addObject.geometry) {
-      const box = new THREE.Box3();
-      box.setFromObject(addObject, true);
-      objectHalfHeight = Math.abs(box.min.y);
-    // }
+    const box = new THREE.Box3();
+    box.setFromObject(addObject, true);
+    objectDistanceGround = Math.abs(box.min.y);
     sceneHelpers.add(addObject);
     // 轨道控制器禁用左键和右键
     controls.enablePan = false;
@@ -147,7 +149,7 @@ export const mouseInteraction = ({ editor, dom, plane, controls, transformContro
       addObject.position.x += 0.5;
       addObject.position.z += 0.5;
     }
-    addObject.position.y += objectHalfHeight;
+    addObject.position.y += objectDistanceGround;
     event.sceneGraphChanged.dispatch();
   }
   function cancelAdd(e) {
@@ -164,12 +166,14 @@ export const mouseInteraction = ({ editor, dom, plane, controls, transformContro
     event.sceneGraphChanged.dispatch();
   }
 
+  // 移除选中事件
   function removeEventListener() {
     dom.removeEventListener('mousedown', onMouseDown);
     dom.removeEventListener('touchstart', onTouchStart, { passive: false });
     dom.removeEventListener('dblclick', onDoubleClick);
   }
 
+  // 重新添加选中事件
   function resetEventListener() {
     dom.addEventListener('mousedown', onMouseDown);
     dom.addEventListener('touchstart', onTouchStart, { passive: false });

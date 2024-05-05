@@ -80,7 +80,7 @@ onMounted(() => {
   align-items: center;
 }
 .select {
-  width: 125px;
+  /* width: 125px; */
   margin-right: 8px;
 }
 </style>

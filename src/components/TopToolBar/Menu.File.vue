@@ -1,6 +1,6 @@
 <template>
   <el-dropdown :hide-on-click="false" @command="handleCommand">
-    <el-button type="primary" size="small">文件</el-button>
+    <el-button size="small">文件</el-button>
     <template #dropdown>
       <el-dropdown-menu>
         <el-dropdown-item command="New">新建</el-dropdown-item>

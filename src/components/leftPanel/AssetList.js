@@ -1,6 +1,7 @@
 import { ref } from 'vue';
 
 export const object3DList = [
+  // { key: 'line', img: require('@/assets/object3D/group.png'), name: '线' },
   { key: 'group', img: require('@/assets/object3D/group.png'), name: '组' },
   { key: 'sprite', img: require('@/assets/object3D/sprite.png'), name: '精灵图' },
   { key: 'box', img: require('@/assets/object3D/box.png'), name: '正方体' },

@@ -1,10 +1,10 @@
 import * as THREE from 'three';
 import { Selector } from './Viewport.Selector';
-import { dispatch, signals } from '@/utils/event/index';
+import { signals } from '@/utils/event/index';
 import { History as _History } from './History.js';
 import { Storage as _Storage } from './Storage.js';
 import { Loader } from './file/Loader';
-import { resetConfig } from '@/hooks/useConfig';
+import { globalConfig, resetConfig } from '@/hooks/useConfig';
 
 // 默认相机
 const _DEFAULT_CAMERA = new THREE.PerspectiveCamera(50, 1, 0.01, 1000);
@@ -26,7 +26,6 @@ export const MODE = {
 };
 
 function Editor() {
-  this.dispatch = dispatch;
   this.event = signals;
   // 选择器
   this.selector = new Selector(this);
@@ -79,7 +78,6 @@ Editor.prototype = {
     this.renderer = new THREE.WebGLRenderer({ antialias });
     // 如果设置开启，允许在场景中使用阴影贴图 默认是 false
     this.renderer.shadowMap.enabled = shadowMap.enabled;
-    // TODO
     // 定义阴影贴图类型 (未过滤, 关闭部分过滤, 关闭部分双线性过滤)
     this.renderer.shadowMap.type = parseFloat(shadowMap.type);
     // 色调映射
@@ -365,6 +363,52 @@ Editor.prototype = {
     this.event.viewportShadingChanged.dispatch();
   },
 
+  // 开启剖切物体
+  activeObjectClipping: function (object, planes) {
+    if (!object) return;
+    this.mode = MODE.CLIPPING;
+    this.renderer.localClippingEnabled = true;
+    this.event.historyChanged.active = false;
+    object.traverse((child) => {
+      const { material } = child;
+      if (!material) return;
+      if (Array.isArray(material)) {
+        material.forEach((item) => {
+          item.clippingPlanes = planes;
+          item.clipShadows = true;
+          // alphaToCoverage是一种提高透明度物体边缘质量的有效技术
+          item.alphaToCoverage = true;
+        });
+      } else {
+        material.clippingPlanes = planes;
+        material.clipShadows = true;
+        // alphaToCoverage是一种提高透明度物体边缘质量的有效技术
+        material.alphaToCoverage = true;
+      }
+    });
+  },
+  // 关闭剖切物体
+  deactivatObjectClipping: function (object) {
+    if (!object) return;
+    object.traverse((child) => {
+      const { material } = child;
+      if (!material) return;
+      if (Array.isArray(material)) {
+        material.forEach((item) => {
+          item.clippingPlanes = null;
+          item.clipShadows = false;
+          item.alphaToCoverage = false;
+        });
+      } else {
+        material.clippingPlanes = null;
+        material.clipShadows = false;
+        material.alphaToCoverage = false;
+      }
+    });
+    this.renderer.localClippingEnabled = false;
+    this.mode = MODE.DEFAULT;
+    this.event.historyChanged.active = true;
+  },
   // 执行命令
   execute: function (cmd, optionalName) {
     this.history.execute(cmd, optionalName);
@@ -418,8 +462,12 @@ Editor.prototype = {
       project: {
         // shadows: this.config.getKey( 'project/renderer/shadows' ),
         // shadowType: this.config.getKey( 'project/renderer/shadowType' ),
-        // vr: this.config.getKey( 'project/vr' ),
         // toneMapping: this.config.getKey( 'project/renderer/toneMapping' ),
+        // toneMappingExposure: this.config.getKey( 'project/renderer/toneMappingExposure' ),
+        // vr: this.config.getKey( 'project/vr' )
+        shadows: globalConfig.renderer.shadowMap.enabled,
+        shadowType: globalConfig.renderer.shadowMap.type,
+        toneMapping: globalConfig.renderer.toneMapping
         // toneMappingExposure: this.config.getKey( 'project/renderer/toneMappingExposure' )
       },
       camera: this.viewportCamera.toJSON(),

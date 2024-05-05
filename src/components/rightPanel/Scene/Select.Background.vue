@@ -10,9 +10,10 @@
 
     <Texture v-show="selectValue === 'Equirectangular'" @change="equirectTextureChange" ref="equirectTextureRef" />
   </div>
-  <div class="row" v-if="selectValue === 'Equirectangular'">
-    <div>
-      模糊:<SlideInput
+  <div class="wrap" v-if="selectValue === 'Equirectangular'">
+    <div class="row">
+      <span class="extra">模糊：</span>
+      <SlideInput
         v-model:value="backgroundBlurriness"
         :min="0"
         :max="1"
@@ -20,8 +21,14 @@
         @change="numberChange('backgroundBlurriness')"
       />
     </div>
-    <div>
-      亮度:<SlideInput v-model:value="backgroundIntensity" :min="0" onlyNumber @change="numberChange('backgroundIntensity')" />
+    <div class="row">
+      <span class="extra">亮度：</span>
+      <SlideInput
+        v-model:value="backgroundIntensity"
+        :min="0"
+        onlyNumber
+        @change="numberChange('backgroundIntensity')"
+      />
     </div>
   </div>
 </template>
@@ -151,8 +158,12 @@ onMounted(() => {
   display: flex;
   align-items: center;
 }
+.extra {
+  width: 60px;
+  display: inline-flex;
+}
 .select {
-  width: 125px;
+  /* width: 125px; */
   margin-right: 8px;
 }
 </style>

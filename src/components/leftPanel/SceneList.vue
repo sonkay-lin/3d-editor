@@ -1,7 +1,7 @@
 <template>
   <div class="scenc-list">
     <p class="title">场景物体</p>
-    <div class="tree" :key="key">
+    <div class="tree">
       <el-tree
         :data="treeData"
         :props="defaultProps"
@@ -52,9 +52,7 @@ const defaultProps = {
 };
 
 let editor = null;
-const key = ref(0);
 const treeRef = ref();
-
 const treeData = ref([]);
 // 当前树组件选中的对象key
 const curretnKey = ref(null);
@@ -214,13 +212,8 @@ onMounted(() => {
 
 <style scoped lang="scss">
 .scenc-list {
-  height: 350px;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  /* bottom: 350px; */
-
+  height: 100%;
+  // overflow: scroll;
   .title {
     line-height: 30px;
   }
@@ -238,10 +231,19 @@ onMounted(() => {
     }
     .node-content {
       width: 100%;
+      max-width: 100%;
       height: 100%;
       display: flex;
       align-items: center;
       user-select: none;
+      box-sizing: border-box;
+      padding-right: 42px;
+    }
+    .el-tree-node__label {
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+      width: calc(100% - 42px);
     }
     .view,
     .delete {

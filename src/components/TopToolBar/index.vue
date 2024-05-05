@@ -7,6 +7,7 @@
     <div class="bar-center">
       <ICon content="撤销(ctrl+z)" @click="command('undo')"><RefreshLeft /></ICon>
       <ICon content="撤销(ctrl+y)" @click="command('redo')"><RefreshRight /></ICon>
+      <ICon content="复制" @click="copy()" code="icon-fuzhi"></ICon>
       <ICon content="删除" @click="delObject()"><Delete /></ICon>
       <ICon
         v-if="globalConfig.isAdsorption"
@@ -16,6 +17,7 @@
       ></ICon>
       <ICon v-else content="关闭网格吸附" code="icon-xifuguanbi" @click="handleAdsorption()" />
       <ICon content="模型剖切" code="icon-qiege" @click="clipping()" />
+      <ICon content="贴地" code="icon-tiedichuli" @click="closeGround()" />
     </div>
     <div>
       <ICon v-if="!isFullSceen" content="全屏" code="icon-quanping" @click="setFullSceen()" />
@@ -34,7 +36,7 @@ import { useTool } from '@/hooks/useTool';
 import { globalConfig, sceneConfig } from '@/hooks/useConfig';
 import { getViewport } from '@/hooks/useViewport';
 
-const { isFullSceen, setFullSceen, delObject, dev, save } = useTool();
+const { isFullSceen, setFullSceen, delObject, copy, save } = useTool();
 
 const command = (action) => {
   const editor = getEditor();
@@ -45,6 +47,8 @@ const command = (action) => {
   }
 };
 
+
+
 const handleAdsorption = () => {
   globalConfig.isAdsorption = !globalConfig.isAdsorption;
 };
@@ -52,6 +56,11 @@ const handleAdsorption = () => {
 const clipping = () => {
   const { useClipping } = getViewport();
   useClipping();
+};
+
+const closeGround = () => {
+  const { useCloseGround } = getViewport();
+  useCloseGround();
 };
 </script>
 

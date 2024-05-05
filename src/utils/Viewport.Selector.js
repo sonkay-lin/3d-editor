@@ -1,4 +1,4 @@
-import { MODE } from "./Editor";
+import { MODE } from './Editor';
 
 class Selector {
   constructor(editor) {
@@ -32,14 +32,8 @@ class Selector {
     if (this.editor.selected === object) return;
 
     if (this.editor.mode === MODE.CLIPPING) {
-      this.editor.selected && this.editor.selected.traverse(child => {
-        if (child.material) {
-          child.material.clippingPlanes = null;
-          child.material.clipShadows = false;
-          child.material.alphaToCoverage = false;
-        }
-      })
-      this.editor.mode = MODE.DEFAULT
+      const { selected } = this.editor;
+      this.editor.deactivatObjectClipping(selected);
     }
 
     let uuid = null;

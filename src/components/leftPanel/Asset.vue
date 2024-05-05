@@ -89,9 +89,13 @@ const changeNav = () => {
     grid-gap: 10px 8px;
     overflow: hidden;
     box-sizing: border-box;
+    // display: flex;
+    // flex-wrap: wrap;
+    // justify-content: space-around;
   }
   :deep(.el-card) {
     height: 112px;
+    // margin: 0 5px 10px 5px;
     cursor: pointer;
     .el-card__header {
       line-height: 26px;
@@ -101,11 +105,14 @@ const changeNav = () => {
     }
     .el-card__body {
       position: relative;
-      img {
-        height: 85px;
-      }
+      text-align: center;
       padding: 0;
       background-color: rgb(170, 170, 170);
+      img {
+        height: 85px;
+        width: 100%;
+        object-fit: contain;
+      }
     }
     .el-progress {
       position: absolute;

@@ -52,7 +52,6 @@ export const materialType = {
     'uuid',
     'name',
     'vertexColors',
-    'depthPacking',
     'bumpMap',
     'normalMap',
     'displacementMap',
@@ -325,6 +324,7 @@ export const materialType = {
     'depthWrite',
     'userData'
   ],
+  // 精灵材质
   SpriteMaterial: [
     'type',
     'uuid',
@@ -340,8 +340,67 @@ export const materialType = {
     'transparent',
     'forceSinglePass',
     'alphaTest',
+    'depthTest',
+    'depthWrite',
+    'userData'
+  ],
+  // 基础线条材质
+  LineBasicMaterial: [
+    'type',
+    'uuid',
+    'name',
+    'color',
+    'vertexColors',
+    // 'linewidth',
+    'map',
+    'side',
+    'blending',
+    'opacity',
+    'transparent',
+    'forceSinglePass',
     'alphaTest',
     'depthTest',
+    'depthWrite',
+    'userData'
+  ],
+  // 虚线材质
+  LineDashedMaterial: [
+    'type',
+    'uuid',
+    'name',
+    'color',
+    'vertexColors',
+    // 'linewidth',
+    'map',
+    'side',
+    'blending',
+    'opacity',
+    'transparent',
+    'forceSinglePass',
+    'alphaTest',
+    'depthTest',
+    'depthWrite',
+    'userData'
+  ],
+  // 点材质
+  PointsMaterial: [
+    'type',
+    'uuid',
+    'name',
+    'color',
+    'vertexColors',
+    'map',
+    'alphaMap',
+    'side',
+    'size',
+    'sizeAttenuation',
+    'blending',
+    'opacity',
+    'transparent',
+    'forceSinglePass',
+    'alphaTest',
+    'depthTest',
+    'depthWrite',
     'userData'
   ]
 };
@@ -381,22 +440,22 @@ export const meshMaterialOptions = {
 };
 
 export const lineMaterialOptions = {
-  LineBasicMaterial: 'LineBasicMaterial',
-  LineDashedMaterial: 'LineDashedMaterial',
-  RawShaderMaterial: 'RawShaderMaterial',
-  ShaderMaterial: 'ShaderMaterial'
+  LineBasicMaterial: '基础线条材质-LineBasicMaterial',
+  LineDashedMaterial: '虚线材质-LineDashedMaterial',
+  RawShaderMaterial: '原始着色器材质-RawShaderMaterial',
+  ShaderMaterial: '着色器材质-ShaderMaterial'
 };
 
 export const spriteMaterialOptions = {
-  SpriteMaterial: 'SpriteMaterial',
-  RawShaderMaterial: 'RawShaderMaterial',
-  ShaderMaterial: 'ShaderMaterial'
+  SpriteMaterial: '精灵材质-SpriteMaterial',
+  RawShaderMaterial: '原始着色器材质-RawShaderMaterial',
+  ShaderMaterial: '着色器材质-ShaderMaterial'
 };
 
 export const pointsMaterialOptions = {
-  PointsMaterial: 'PointsMaterial',
-  RawShaderMaterial: 'RawShaderMaterial',
-  ShaderMaterial: 'ShaderMaterial'
+  PointsMaterial: '点材质-PointsMaterial',
+  RawShaderMaterial: '原始着色器材质-RawShaderMaterial',
+  ShaderMaterial: '着色器材质-ShaderMaterial'
 };
 
 export const vertexShaderVariables = [

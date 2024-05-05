@@ -1,7 +1,7 @@
 <template>
   <span class="texture">
     <input type="file" style="display: none" @change="inputChange" ref="inputRef" />
-    <canvas class="canvas" :width="32" :height="16" @click="canvasClick" ref="canvasRef"></canvas>
+    <canvas :width="32" :height="16" @click="canvasClick" ref="canvasRef"></canvas>
   </span>
 </template>
 

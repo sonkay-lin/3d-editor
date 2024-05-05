@@ -1,11 +1,12 @@
 export { AddObjectCommand } from './AddObjectCommand.js';
-export { MoveObjectCommand } from './MoveObjectCommand.js'
+export { MoveObjectCommand } from './MoveObjectCommand.js';
 export { RemoveObjectCommand } from './RemoveObjectCommand.js';
 export { SetPositionCommand } from './SetPositionCommand.js';
 export { SetRotationCommand } from './SetRotationCommand.js';
 export { SetScaleCommand } from './SetScaleCommand.js';
-export { SetValueCommand } from './SetValueCommand.js'
-export { SetColorCommand } from './SetColorCommand.js'
+export { SetValueCommand } from './SetValueCommand.js';
+export { SetColorCommand } from './SetColorCommand.js';
+// export { AddMaterialCommand } from './AddMaterialCommand.js';
 export { SetMaterialCommand } from './SetMaterialCommand.js';
 export { SetMaterialColorCommand } from './SetMaterialColorCommand.js';
 export { SetMaterialMapCommand } from './SetMaterialMapCommand.js';

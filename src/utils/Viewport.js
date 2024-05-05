@@ -16,8 +16,8 @@ import { ElMessage } from 'element-plus';
 /**
  * @description Viewport 添加dom操作和事件
  */
-export default function Viewport(editor) {
-  const dom = document.getElementById('viewport');
+export default function Viewport(editor, id = 'viewport') {
+  const dom = document.getElementById(id);
 
   let renderer = null;
   // 用于从立方体贴图环境纹理生成预过滤
@@ -34,10 +34,6 @@ export default function Viewport(editor) {
   selectionBox.material.transparent = true;
   selectionBox.visible = false;
   sceneHelpers.add(selectionBox);
-
-  let objectPositionOnDown = null;
-  let objectRotationOnDown = null;
-  let objectScaleOnDown = null;
 
   // 辅助线
   const grid = new THREE.Group();
@@ -62,6 +58,7 @@ export default function Viewport(editor) {
     new THREE.Plane(new THREE.Vector3(0, -1, 0), box.max.y),
     new THREE.Plane(new THREE.Vector3(0, 0, -1), box.max.z)
   ];
+  const clipBox = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshBasicMaterial({ visible: false }));
 
   // 地面，用来给模型投射放置在网格上
   const geometry = new THREE.PlaneGeometry(1000, 1000);
@@ -117,17 +114,23 @@ export default function Viewport(editor) {
             planes[4].constant = box.max.y;
             planes[5].constant = box.max.z;
           }
+          // 如果模型太大使用包围盒会影响页面性能
+          box.setFromObject(object, true);
+
+          const helper = editor.helpers[object.id];
+          if (helper !== undefined && helper.isSkeletonHelper !== true) {
+            helper.update();
+          }
+          event.refreshSidebarObject3D.dispatch(object);
         }
-        box.setFromObject(object, true);
-        const helper = editor.helpers[object.id];
-        if (helper !== undefined && helper.isSkeletonHelper !== true) {
-          helper.update();
-        }
-        event.refreshSidebarObject3D.dispatch(object);
       }
 
       render(true);
     });
+
+    let objectPositionOnDown = null;
+    let objectRotationOnDown = null;
+    let objectScaleOnDown = null;
     transformControls.addEventListener('mouseDown', () => {
       const object = transformControls.object;
       objectPositionOnDown = object.position.clone();
@@ -140,8 +143,10 @@ export default function Viewport(editor) {
       if (object !== undefined) {
         switch (transformControls.getMode()) {
           case 'translate':
-            if (!objectPositionOnDown.equals(object.position)) {
-              editor.execute(new SetPositionCommand(object, object.position, objectPositionOnDown));
+            if (editor.mode !== MODE.CLIPPING) {
+              if (!objectPositionOnDown.equals(object.position)) {
+                editor.execute(new SetPositionCommand(object, object.position, objectPositionOnDown));
+              }
             }
             break;
 
@@ -163,16 +168,16 @@ export default function Viewport(editor) {
     });
     sceneHelpers.add(transformControls);
     return transformControls;
-  };
+  }
   // TODO 右下角控件
   // viewHelper.center = controls.center;
 
   // 对象拾取
   const { addStart, cancelAdd } = mouseInteraction({ editor, dom, plane: Plane, controls, transformControls });
-  useViewport({ controls, transformControls, useClipping, addStart, cancelAdd, render });
+  useViewport({ controls, transformControls, useClipping, useCloseGround, addStart, cancelAdd, render });
 
   // 裁切物体
-  function useClipping () {
+  function useClipping() {
     const { selected: object } = editor;
 
     if (!object) {
@@ -185,9 +190,8 @@ export default function Viewport(editor) {
     }
     ElMessage.success('移动包围盒进行剖切');
 
-    editor.mode = MODE.CLIPPING;
     editor.event.objectSelected.dispatch(null);
-    renderer.localClippingEnabled = true;
+    editor.activeObjectClipping(object, planes);
 
     box.setFromObject(object, true);
     if (box.isEmpty() === false) {
@@ -198,19 +202,9 @@ export default function Viewport(editor) {
     const width = box.max.x - box.min.x;
     const height = box.max.y - box.min.y;
     const depth = box.max.z - box.min.z;
-    const boxSize = new THREE.BoxGeometry(width, height, depth);
-    const mesh = new THREE.Mesh(boxSize, new THREE.MeshBasicMaterial({ visible: false }));
-    mesh.position.copy(center);
+    clipBox.geometry = new THREE.BoxGeometry(width, height, depth);
+    clipBox.position.copy(center);
 
-    object.traverse((child) => {
-      if (child.material) {
-        let material = child.material;
-        material.clippingPlanes = planes;
-        material.clipShadows = true;
-        // alphaToCoverage是一种提高透明度物体边缘质量的有效技术
-        material.alphaToCoverage = true;
-      }
-    });
     planes[0].constant = box.min.x > 0 ? -box.min.x : Math.abs(box.min.x);
     planes[1].constant = box.min.y > 0 ? -box.min.y : Math.abs(box.min.y);
     planes[2].constant = box.min.z > 0 ? -box.min.z : Math.abs(box.min.z);
@@ -219,10 +213,24 @@ export default function Viewport(editor) {
     planes[5].constant = box.max.z;
 
     // TODO: remove mesh
-    sceneHelpers.add(mesh);
-    transformControls.attach(mesh);
+    sceneHelpers.add(clipBox);
+    transformControls.attach(clipBox);
     render();
-  };
+  }
+  // 物体贴地
+  function useCloseGround() {
+    const { selected: object } = editor;
+
+    if (!object) {
+      ElMessage.warning('请选择物体');
+      return;
+    }
+
+    object.position.y -= box.min.y;
+    box.setFromObject(object, true);
+    event.refreshSidebarObject3D.dispatch(object);
+    event.sceneGraphChanged.dispatch();
+  }
 
   // 事件
   (() => {
@@ -327,6 +335,7 @@ export default function Viewport(editor) {
       updateAspectRatio();
       renderer.setSize(dom.offsetWidth, dom.offsetHeight);
       pathtracer.setSize(dom.offsetWidth, dom.offsetHeight);
+
       render(false, 'windowResize');
     });
     // 渲染器创建完成事件
@@ -397,13 +406,17 @@ export default function Viewport(editor) {
       }
       // 撤销
       if (_key === 'z') {
-        e.preventDefault();
-        editor.undo();
+        if (editor.mode !== MODE.CLIPPING) {
+          e.preventDefault();
+          editor.undo();
+        }
       }
       // 重做
       if (_key === 'y') {
-        e.preventDefault();
-        editor.redo();
+        if (editor.mode !== MODE.CLIPPING) {
+          e.preventDefault();
+          editor.redo();
+        }
       }
     };
     window.addEventListener('resize', () => event.windowResize.dispatch());

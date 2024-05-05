@@ -52,7 +52,6 @@ onMounted(() => {
   align-items: center;
 }
 .select {
-  width: 140px;
   margin-left: 12px;
 }
 </style>

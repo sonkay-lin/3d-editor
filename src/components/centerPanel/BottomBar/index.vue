@@ -33,7 +33,7 @@ const IconList = [
       } else {
         activeTool.value = activeTool.value.filter((item) => item !== GRID);
       }
-      getEditor().evnet.sceneGraphChanged.dispatch();
+      getEditor().event.sceneGraphChanged.dispatch();
     }
   },
   {
@@ -47,7 +47,7 @@ const IconList = [
       } else {
         activeTool.value = activeTool.value.filter((item) => item !== AXIS);
       }
-      getEditor().evnet.sceneGraphChanged.dispatch();
+      getEditor().event.sceneGraphChanged.dispatch();
     }
   },
   // {
@@ -62,7 +62,7 @@ const IconList = [
   //       activeTool.value = activeTool.value.filter((item) => item !== HELPER);
   //     }
   //     getEditor().sceneHelpers.visible = globalConfig.isShowHelper;
-  //     getEditor().evnet.sceneGraphChanged.dispatch();
+  //     getEditor().event.sceneGraphChanged.dispatch();
   //   }
   // }
 ];
@@ -96,13 +96,14 @@ onMounted(() => {
 <style scoped lang="scss">
 .bottom {
   position: absolute;
-  left: 302px;
+  left: 0;
   /* width: 500px; */
   bottom: 0;
   height: 28px;
   display: flex;
   align-items: center;
   justify-content: flex-start;
+  z-index: 1;
   :deep(.toolIcon) {
     width: 24px;
     height: 24px;

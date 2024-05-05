@@ -4,12 +4,13 @@ import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import 'element-plus/theme-chalk/dark/css-vars.css'
 import './styles/dark/css-vars.css'
-import './styles/common.css'
+import './styles/common.scss'
 import '@/assets/fonts/iconfont.css'
 import Color from '@/components/common/Color.vue'
 import SlideInput from '@/components/common/SlideInput.vue'
 import ICon from '@/components/common/ICon.vue'
 import Texture from '@/components/common/Texture.vue'
+import 'splitpanes/dist/splitpanes.css'
 
 const app = createApp(App)
 app.component('ICon', ICon)

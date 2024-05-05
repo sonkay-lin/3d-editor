@@ -15,6 +15,7 @@
     "mitt": "^3.0.1",
     "pinia": "^2.1.7",
     "signals": "^1.0.0",
+    "splitpanes": "^3.1.5",
     "three": "^0.163.0",
     "three-gpu-pathtracer": "^0.0.20",
     "vue": "^3.2.13",
@@ -23,6 +24,7 @@
   "devDependencies": {
     "@babel/core": "^7.12.16",
     "@babel/eslint-parser": "^7.12.16",
+    "@types/splitpanes": "^2.2.6",
     "@vue/babel-plugin-jsx": "^1.2.2",
     "@vue/cli-plugin-babel": "~5.0.0",
     "@vue/cli-plugin-eslint": "~5.0.0",

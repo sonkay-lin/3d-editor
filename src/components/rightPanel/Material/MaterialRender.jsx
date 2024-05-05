@@ -5,7 +5,7 @@ import BlendingType from './Select.Blending.vue';
 import DepthPackingSelect from './Select.DepthPacking.vue';
 import MapTexture from './MapTexture.vue';
 import { materialType } from './MaterialParameters';
-import { ElFormItem, ElCheckbox } from 'element-plus'
+import { ElFormItem, ElCheckbox } from 'element-plus';
 import SlideInput from '@/components/common/SlideInput.vue';
 import Color from '@/components/common/Color.vue';
 
@@ -19,9 +19,7 @@ export default defineComponent({
           <Color v-model:color={formData.value.color} onChange={() => change('color')} />
         </ElFormItem>
       ),
-      program: () => <ElFormItem label="程序">
-        TODO中
-      </ElFormItem>,
+      program: () => <ElFormItem label="程序">TODO中</ElFormItem>,
       emissive: () => (
         <ElFormItem label="自发光">
           <div class="row">
@@ -145,6 +143,11 @@ export default defineComponent({
       depthPacking: () => (
         <ElFormItem label="深度包装">
           <DepthPackingSelect v-model={formData.value.depthPacking} onChange={() => change('depthPacking')} />
+        </ElFormItem>
+      ),
+      size: () => (
+        <ElFormItem label="大小">
+          <SlideInput v-model:value={formData.value.size} min={0} onChange={() => change('size')} />
         </ElFormItem>
       ),
 

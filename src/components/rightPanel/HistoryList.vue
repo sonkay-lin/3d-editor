@@ -39,24 +39,21 @@ onMounted(() => {
 
 <style scoped lang="scss">
 .history {
-  position: absolute;
   border-radius: 8px;
-  width: 200px;
-  height: 300px;
-  padding: 50px 10px 10px;
-  bottom: 10px;
-  right: 310px;
+  width: 100%;
+  height: 100%;
+  padding: 10px;
   background-color: rgba(24, 24, 24, 0.8);
   overflow: hidden;
+  box-sizing: border-box;
   .title {
     margin-bottom: 10px;
-    position: absolute;
-    width: calc(100% - 20px);
+    width: 100% ;
     left: 10px;
     top: 10px;
   }
   .command {
-    height: 100%;
+    height: calc(100% - 30px);
     overflow: scroll;
     scrollbar-width: none;
   }
@@ -68,6 +65,9 @@ onMounted(() => {
     cursor: pointer;
     color: #eee;
     box-sizing: border-box;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
   }
   .list:hover {
     background-color: rgba(233, 233, 233, 0.1);

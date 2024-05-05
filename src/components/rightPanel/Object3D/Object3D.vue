@@ -12,14 +12,14 @@
       <el-input v-model="formData.name" @change="change('name')"></el-input>
     </el-form-item>
     <!-- 位置 -->
-    <el-form-item label="位置">
-      <div>
+    <el-form-item class="wrap-content" label="位置">
+      <div className='row'>
         x：<SlideInput v-model:value="formData.position.x" @change="change('position')"></SlideInput>
       </div>
-      <div>
+      <div className='row'>
         y：<SlideInput v-model:value="formData.position.y" @change="change('position')"></SlideInput>
       </div>
-      <div>
+      <div className='row'>
         z：<SlideInput v-model:value="formData.position.z" @change="change('position')"></SlideInput>
       </div>
     </el-form-item>
@@ -36,7 +36,8 @@
     </el-form-item>
     <!-- 渲染次序 -->
     <el-form-item label="渲染次序">
-      <el-input-number v-model="formData.renderOrder" @change="change('renderOrder')" />
+      <!-- <el-input-number v-model="formData.renderOrder" @change="change('renderOrder')" /> -->
+      <SlideInput v-model:value="formData.renderOrder" :precision="0" :step="1" @change="change('renderOrder')"></SlideInput>
     </el-form-item>
     <!-- 自定义数据 -->
     <el-form-item label="自定义数据">
@@ -59,7 +60,7 @@ onMounted(() => {
 });
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .title {
   margin-bottom: 10px;
 }

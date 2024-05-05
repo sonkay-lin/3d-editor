@@ -1,25 +1,24 @@
 <template>
-  <div class="left">
-    <SenceList />
-    <Asset />
-    <TransformMode />
-  </div>
+  <Splitpanes class="left" horizontal>
+    <Pane size="30">
+      <SenceList />
+    </Pane>
+    <Pane>
+      <Asset />
+    </Pane>
+  </Splitpanes>
 </template>
 
 <script setup>
 import SenceList from './SceneList.vue'
 import Asset from './Asset.vue'
-import TransformMode from './TransformMode.vue';
+import { Splitpanes, Pane } from 'splitpanes';
 </script>
 
 <style scoped>
 .left {
-  position: absolute;
-  width: 300px;
-  padding-top: 350px;
-  height: calc(100% - 32px);
-  box-sizing: border-box;
-  top: 32px;
-  left: 0;
+  width: 100%;
+  height: 100%;
+  min-width: 285px;
 }
 </style>

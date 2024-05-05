@@ -4,6 +4,7 @@ let render;
 let addStart;
 let cancelAdd;
 let useClipping;
+let useCloseGround
 export const useViewport = (option) => {
   controls = option.controls;
   transformControls = option.transformControls;
@@ -11,6 +12,7 @@ export const useViewport = (option) => {
   addStart = option.addStart;
   cancelAdd = option.cancelAdd;
   useClipping = option.useClipping;
+  useCloseGround = option.useCloseGround;
 };
 
 export const getViewport = () => {
@@ -20,6 +22,7 @@ export const getViewport = () => {
     render,
     addStart,
     cancelAdd,
-    useClipping
+    useClipping,
+    useCloseGround
   };
 };

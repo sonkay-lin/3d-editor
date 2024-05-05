@@ -72,15 +72,12 @@ export const isShowMaterialOrGeometry = (object) => {
   return true;
 };
 
-// 屏幕坐标转世界坐标
-export function screenToWorld(x, y) {
-  const editor = getEditor();
-  const { camera } = editor;
-  const vector = new THREE.Vector3();
-  vector.set((x / window.innerWidth) * 2 - 1, -(y / window.innerHeight) * 2 + 1, 0.5);
-  vector.unproject(camera);
-
-  const dir = vector.sub(camera.position).normalize();
-  const distance = -camera.position.z / dir.z;
-  return camera.position.clone().add(dir.multiplyScalar(distance));
+export const materialTraverse = (object, callback) => {
+  if (Array.isArray(object.material)) {
+    object.material.forEach(item => {
+      callback(item)
+    })
+  } else {
+    callback(object.material)
+  }
 }

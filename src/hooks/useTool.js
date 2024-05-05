@@ -57,10 +57,20 @@ export const useTool = () => {
     }
   };
 
+  const copy = () => {
+    editor = getEditor();
+    const { selected, event } = editor;
+    if (!selected) return;
+    const newObj = selected.clone();
+    editor.addObject(newObj);
+    event.sceneGraphChanged.dispatch();
+  };
+
   return {
     isFullSceen,
     setFullSceen,
     delObject,
+    copy,
     dev,
     save
   };

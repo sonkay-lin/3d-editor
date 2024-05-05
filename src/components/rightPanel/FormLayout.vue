@@ -37,6 +37,8 @@ const props = defineProps({
   padding: 50px 10px 10px;
   overflow: hidden;
   position: relative;
+  height: 100%;
+  box-sizing: border-box;
   .title {
     position: absolute;
     top: 10px;

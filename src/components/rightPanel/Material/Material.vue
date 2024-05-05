@@ -1,5 +1,11 @@
 <template>
   <FormLayout title="材质属性" :isShow="isShow">
+    <!-- 插槽 -->
+    <el-form-item label="插槽" v-if="isShowSlot">
+      <el-select v-model="currentMaterial" @change="selectedMaterial">
+        <el-option v-for="(item, index) in materialList" :label="`${index}:${item.name}`" :value="index" :key="index"></el-option>
+      </el-select>
+    </el-form-item>
     <!-- 类型 -->
     <el-form-item label="类型">
       <MaterialType v-model="formData.type" @change="change('type')"></MaterialType>
@@ -13,7 +19,7 @@
       <el-input v-model="formData.name" @change="change('name')"></el-input>
     </el-form-item>
 
-    <MaterialRender />
+    <MaterialRender :key="key"/>
 
     <el-form-item label="自定义数据">
       <el-input v-model="formData.userData" @change="change('userData')" :rows="2" type="textarea" />
@@ -22,42 +28,55 @@
 </template>
 
 <script setup>
-import { ref, computed, toRaw, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import MaterialType from './Select.MarterialType';
 import MaterialRender from './MaterialRender';
 import { useMaterial } from './useMaterial';
 import { isShowMaterialOrGeometry } from '@/libs';
 import FormLayout from '../FormLayout.vue';
 
-const { formData, selectedObj, registerEvent, change } = useMaterial()
+const { key, formData, selectedObj, currentMaterial, materialList, selectedMaterial, registerEvent, change } = useMaterial();
+
 // 是否展示属性栏
 const isShow = computed(() => {
   return isShowMaterialOrGeometry(selectedObj.value);
 });
 
+const isShowSlot = computed(() => {
+  if (selectedObj.value && Array.isArray(selectedObj.value.material)) {
+    return true;
+  }
+  return false;
+});
+
 onMounted(() => {
-  registerEvent()
+  registerEvent();
 });
 </script>
 
-<style scoped>
-.title {
+<style scoped lang="scss">
+.newMaterial {
   margin-bottom: 10px;
-}
-.el-slider {
-  margin: 0 8px;
-}
-.space {
-  margin: 0 8px;
-}
-.mutil-item {
   display: flex;
-  flex-direction: column;
 }
-.mutil-item >>> .content {
-  margin-bottom: 8px;
-}
-.mutil-item >>> .texture {
-  margin-left: 12px;
+.material-list {
+  width: 100%;
+  margin-bottom: 18px;
+  border: 1px solid var(--el-border-color);
+  min-height: 24px;
+  max-height: 180px;
+  overflow: scroll;
+  scrollbar-width: none;
+  .material-item {
+    line-height: 24px;
+    // font-size: var(--el-form-label-font-size);
+    font-size: 12px;
+    padding: 0 8px;
+    cursor: pointer;
+  }
+  .material-item:hover,
+  .active {
+    background-color: #262727;
+  }
 }
 </style>

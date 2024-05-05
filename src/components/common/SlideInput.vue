@@ -159,6 +159,7 @@ watch(
   position: relative;
   display: inline-flex;
   height: 100%;
+  width: 100%;
   .left,
   .right {
     position: absolute;
@@ -188,6 +189,9 @@ watch(
   :deep(.el-input-number__decrease),
   :deep(.el-input-number__increase) {
     display: none;
+  }
+  :deep(.el-input-number--small) {
+    width: 100%;
   }
   :deep(.el-input__inner) {
     cursor: n-resize;

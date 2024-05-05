@@ -9,9 +9,8 @@
 <script setup>
 import { getEditor } from '@/hooks/useEditor';
 import * as THREE from 'three';
-import { ref, onMounted, onUnmounted, watch, computed, toRaw } from 'vue';
+import { ref, onMounted, onUnmounted, watch, computed, toRaw, nextTick } from 'vue';
 import { SetMaterialMapCommand } from '@/utils/commands/Commands';
-import { offEvent } from '@/utils/event';
 import { useMaterial } from './useMaterial';
 import MapTextureInput from './MapTexture.Input';
 
@@ -21,12 +20,11 @@ const props = defineProps({
     default: ''
   }
 });
-const { selectedObj } = useMaterial();
+const { selectedObj, currentMaterial } = useMaterial();
 
 let editor = null;
 let object = null;
 let material = null;
-let materialSlot = 0;
 let texture = null;
 const colorMaps = ['map', 'emissiveMap', 'sheenColorMap', 'specularColorMap', 'envMap'];
 const textureRef = ref();
@@ -74,13 +72,13 @@ const onChange = () => {
       if (geometry.hasAttribute('uv') === false) console.warn("Geometry doesn't have uvs:", geometry);
       if (property === 'envMap') newMap.mapping = THREE.EquirectangularReflectionMapping;
     }
-    editor.execute(new SetMaterialMapCommand(object, property, newMap, materialSlot));
+    editor.execute(new SetMaterialMapCommand(object, property, newMap, currentMaterial.value));
   }
 };
 
 const update = async () => {
   if (object === null || object.material === undefined) return;
-  material = editor.getObjectMaterial(object, materialSlot);
+  material = editor.getObjectMaterial(object, currentMaterial.value);
   const { property } = props;
   if (property in material) {
     if (material[property] !== null) {
@@ -103,12 +101,11 @@ onMounted(async () => {
   // 事件先触发MapTure组件才被创建，监听事件是在触发后创建的,
   // 所以不会触发objectSelected,所以采用useMaterial中的selectedObj
   // editor.event.objectSelected.add(objectSelected);
-  objectSelected(selectedObj.value);
   editor.event.materialChanged.add(materialChanged);
+  objectSelected(selectedObj.value);
 });
 onUnmounted(() => {
-  // offEvent.objectSelected(objectSelected);
-  offEvent.materialChanged(materialChanged);
+  editor.event.materialChanged.remove(materialChanged);
 });
 </script>
 

@@ -5,21 +5,30 @@
     </el-select>
     <Color v-if="selectValue !== 'None'" v-model:color="fogColor" @change="settingChange('color')"></Color>
   </div>
-  <div class="row">
+  <div>
     <template v-if="selectValue === 'Fog'">
-      <div>近点:<SlideInput v-model:value="fogNear" :min="0" onlyNumber @change="settingChange('near')" /></div>
-      <div>远点:<SlideInput v-model:value="fogFar" :min="0" onlyNumber @change="settingChange('far')" /></div>
+      <div class="row">
+        <span class="label">近点：</span>
+        <SlideInput v-model:value="fogNear" :min="0" onlyNumber @change="settingChange('near')" />
+      </div>
+      <div class="row">
+        <span class="label">远点：</span>
+        <SlideInput v-model:value="fogFar" :min="0" onlyNumber @change="settingChange('far')" />
+      </div>
     </template>
     <template v-if="selectValue === 'FogExp2'">
-      密度:<SlideInput
-        v-model:value="fogDensity"
-        :min="0"
-        :max="0.1"
-        :step="0.01"
-        :precision="3"
-        onlyNumber
-        @change="settingChange('density')"
-      />
+      <div class="row">
+        <span class="label">密度：</span>
+        <SlideInput
+          v-model:value="fogDensity"
+          :min="0"
+          :max="0.1"
+          :step="0.01"
+          :precision="3"
+          onlyNumber
+          @change="settingChange('density')"
+        />
+      </div>
     </template>
   </div>
 </template>
@@ -107,7 +116,10 @@ onMounted(() => {
 
 <style scoped>
 .select {
-  width: 125px;
+  /* width: 125px; */
   margin-right: 8px;
+}
+.label {
+  width: 60px;
 }
 </style>

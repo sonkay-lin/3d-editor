@@ -191,8 +191,8 @@ class History {
       return;
     }
 
-    // this.editor.signals.sceneGraphChanged.active = false;
-    // this.editor.signals.historyChanged.active = false;
+    this.editor.event.sceneGraphChanged.active = false;
+    this.editor.event.historyChanged.active = false;
 
     let cmd = this.undos.length > 0 ? this.undos[this.undos.length - 1] : undefined; // next cmd to pop
 
@@ -211,8 +211,8 @@ class History {
       }
     }
 
-    // this.editor.signals.sceneGraphChanged.active = true;
-    // this.editor.signals.historyChanged.active = true;
+    this.editor.event.sceneGraphChanged.active = true;
+    this.editor.event.historyChanged.active = true;
 
     this.editor.event.sceneGraphChanged.dispatch();
     this.editor.event.historyChanged.dispatch(cmd);
@@ -228,8 +228,8 @@ class History {
 
     this.goToState(-1);
 
-    // this.editor.signals.sceneGraphChanged.active = false;
-    // this.editor.signals.historyChanged.active = false;
+    this.editor.event.sceneGraphChanged.active = false;
+    this.editor.event.historyChanged.active = false;
 
     let cmd = this.redo();
     while (cmd !== undefined) {
@@ -240,8 +240,8 @@ class History {
       cmd = this.redo();
     }
 
-    // this.editor.signals.sceneGraphChanged.active = true;
-    // this.editor.signals.historyChanged.active = true;
+    this.editor.event.sceneGraphChanged.active = true;
+    this.editor.event.historyChanged.active = true;
 
     this.goToState(id);
   }
